@@ -134,7 +134,10 @@
   .section-head h2{font-family:var(--serif);font-weight:700;font-size:clamp(2rem,4.4vw,3.2rem);line-height:1.1;margin:18px 0 16px;text-wrap:balance}
   .section-head p{color:var(--muted);font-size:1.05rem}
 
-  /* MENU SECTION */
+  /* MENU SECTION (Background: Forest) */
+  #menu {
+    background: var(--forest);
+  }
   /* Featured burger */
   .featured-card{
     max-width:520px;
@@ -160,7 +163,7 @@
   .featured-card .card-body p{color:var(--muted);font-size:.95rem;margin-top:10px}
   .featured-card .card-body .price{font-family:var(--serif);color:var(--gold);font-size:1.4rem;font-weight:700;display:block;margin-top:14px}
 
-  /* STORY */
+  /* STORY (Background: Forest-2) */
   .story{background:var(--forest-2)}
   .split{display:grid;gap:56px;align-items:center}
   @media(min-width:900px){.split{grid-template-columns:1.05fr .95fr}}
@@ -195,8 +198,8 @@
   .card-body p{color:var(--muted);font-size:.92rem;margin-top:10px}
   .card-body .cut{display:inline-block;margin-top:16px;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brown-2);border:1px solid var(--brown-2);padding:5px 10px}
 
-  /* O NAS (about restaurant) */
-  .about-resto{background:var(--forest-2)}
+  /* O NAS — RESTAURACJA (Background: Black) */
+  .about-resto{background:var(--black)}
   .about-resto-inner{max-width:760px;margin:0 auto;text-align:center}
   .about-resto-inner h2{font-family:var(--serif);font-weight:700;font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.1;margin:18px 0 26px;text-wrap:balance}
   .about-resto-inner p{color:#cfc9b9;font-size:1.08rem;margin-bottom:18px;text-align:left}
@@ -214,7 +217,12 @@
   .exp-copy .eyebrow{color:var(--gold-soft)}
   .exp-copy .eyebrow::before{background:var(--gold-soft)}
 
-  /* VISIT */
+  /* EVENTY (Background: Forest-2) */
+  #eventy {
+    background: var(--forest-2);
+  }
+
+  /* VISIT / LOKALIZACJA (Background: Black) */
   .visit{background:var(--black)}
   .visit-grid{display:grid;gap:48px;align-items:center}
   @media(min-width:900px){.visit-grid{grid-template-columns:1fr 1fr}}
@@ -256,7 +264,7 @@
       <li><a href="#hodowla">Hodowla</a></li>
       <li><a href="#o-nas">O nas</a></li>
       <li><a href="#eventy">Eventy</a></li>
-      <li><a href="#kontakt">Kontakt</a></li>
+      <li><a href="#lokal">Kontakt</a></li>
     </ul></nav>
     <a href="tel:+48000000000" class="btn btn-solid nav-cta">Zadzwoń teraz</a>
   </div>
@@ -346,7 +354,7 @@
       </article>
 
       <article class="card">
-        <div class="ph"><img src="https://scontent.fpoz3-1.fna.fbcdn.net/v/t39.30808-6/748306371_1614046607397192_4317318649047805273_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1448&ctp=s2048x1448&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=JwGbCJHK4wQQ7kNvwGkPZhk&_nc_oc=Adq3wbgdI-GB8tZ3UHclEIUFvQV_6BpNvyZ9zFH5VYvAnB-1IRBKuO1XHM82ahvOYvk&_nc_zt=23&_nc_ht=scontent.fpoz3-1.fna&_nc_gid=J7o71_-oiZjSOkfdOwVKgg&_nc_ss=7b2a8&oh=00_AQHDJmwgBWfPhM-EqvRZsCOK-V7J5SkCa-Ed83RWz4BxTA&oe=6A94B280" alt="Burger truflowy" /></div>
+        <div class="ph"><img src="https://scontent.fpoz3-1.fna.fbcdn.net/v/t39.30808-6/748306371_1614046607397192_4317318649047805273_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1448&ctp=s2048x1448&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=JwGbCJHK4wQQ7kNvwGkPZhk&_nc_oc=Adq3wbgdI-GB8tZ3UHclEIUFvQV_6BpNvyZ9zFH5VYvAnB-1IRBKuO1XHM82?_nc_ss=7b2a8" alt="Burger truflowy" /></div>
         <div class="card-body">
           <div class="row"><h3>Burger truflowy</h3><span class="price">49 zł</span></div>
           <p>200g wołowiny Hereford, ser brie, rukola, karmelizowana cebula, aioli truflowe.</p>
@@ -398,7 +406,7 @@
 </section>
 
 <!-- EVENTY -->
-<section class="visit" id="eventy">
+<section id="eventy">
   <div class="wrap visit-grid">
     <div>
       <span class="eyebrow">Wydarzenia firmowe</span>
