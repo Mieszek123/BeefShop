@@ -45,6 +45,7 @@
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+    display:flex;flex-direction:column;
   }
   img{display:block;max-width:100%;height:auto}
   a{color:inherit;text-decoration:none}
@@ -137,6 +138,10 @@
   .hero-rating{display:flex;align-items:center;gap:10px;margin-top:20px;font-size:.9rem;color:var(--cream)}
   .hero-rating-stars{color:var(--gold);letter-spacing:2px;font-size:1rem}
 
+  /* Kolejność opowieści: pochodzenie mięsa → restauracja → stół. */
+  header{order:0}.hero{order:1}.strip{order:2}.story{order:3}.about{order:4}
+  #menu{order:5}.done{order:6}.fort{order:7}.reviews{order:8}#eventy{order:9}.visit{order:10}footer{order:11}
+
   /* ================= PASEK ================= */
   .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--smoke);overflow:hidden}
   .strip-track{display:flex;gap:56px;white-space:nowrap;padding:18px 0;animation:scroll 28s linear infinite;font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--gold-soft)}
@@ -226,10 +231,14 @@
 
   /* ================= O NAS ================= */
   .about{background:var(--forest-2)}
+  .about-grid{display:grid;gap:48px;align-items:center}
+  @media(min-width:900px){.about-grid{grid-template-columns:1fr .9fr;gap:72px}}
   .about-inner{max-width:780px}
   .about-inner h2{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.4vw,3.1rem);line-height:0.92;margin:18px 0 26px;text-wrap:balance}
   .about-inner p{color:var(--cream);font-size:1.06rem;margin-bottom:18px;max-width:65ch}
   .about-inner .btn{margin-top:18px}
+  .about-image{width:100%;height:420px;object-fit:cover;object-position:center;align-self:center}
+  @media(max-width:899px){.about-image{height:340px}}
 
   /* ================= EVENTY ================= */
   #eventy{background:var(--forest)}
@@ -265,6 +274,7 @@
   .map-frame{width:100%;height:460px;border:0;filter:grayscale(.3) brightness(.9);transition:filter .4s}
   .map-frame:hover{filter:grayscale(0) brightness(1)}
   .fort .cta-box{margin-top:24px;display:flex;flex-wrap:wrap;gap:14px}
+  .fort-image{width:100%;min-height:460px;object-fit:cover}
 
   /* ================= OPINIE ================= */
   .reviews{background:var(--forest-2);text-align:center}
@@ -286,6 +296,7 @@
   .info span{color:var(--muted);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
   .info b{font-family:var(--serif);font-weight:600;font-size:1.15rem;text-align:right}
   .visit .cta-box{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px}
+  .visit > .wrap > .map-frame{height:360px;margin-top:48px}
   .form{display:grid;gap:16px}
   .form label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
   .form input,.form textarea,.form select{
@@ -319,6 +330,7 @@
       <li><a href="#hodowla">Hodowla</a></li>
       <li><a href="#menu">Menu</a></li>
       <li><a href="#o-nas">O nas</a></li>
+      <li><a href="#opinie">Opinie</a></li>
       <li><a href="#eventy">Eventy</a></li>
       <li><a href="galeria.html">Galeria</a></li>
       <li><a href="#fort">Jak dojechać</a></li>
@@ -338,6 +350,7 @@
       <li><a href="#hodowla">Hodowla</a></li>
       <li><a href="#menu">Menu</a></li>
       <li><a href="#o-nas">O nas</a></li>
+      <li><a href="#opinie">Opinie</a></li>
       <li><a href="#eventy">Eventy</a></li>
       <li><a href="galeria.html">Galeria</a></li>
       <li><a href="#fort">Jak dojechać</a></li>
@@ -361,7 +374,7 @@
     <div class="hero-inner">
       <span class="eyebrow">Od pastwiska po talerz</span>
       <h1>Wołowina z naszej hodowli, wysmażona na <span class="gold-script">Forcie Służew</span></h1>
-      <p>800 sztuk bydła rasy Hereford na pastwiskach Warmii i&nbsp;Mazur. Ta sama wołowina trafia prosto na nasz grill w&nbsp;Warszawie.</p>
+      <p>BEEFshop &amp; GRILL to steakhouse w&nbsp;Warszawie, w&nbsp;którym znamy drogę każdego steku: od pastwiska na Warmii aż po Twój stół w&nbsp;zabytkowych murach fortu.</p>
       <div class="hero-actions">
         <a href="tel:+48000000000" class="btn btn-solid">Zadzwoń teraz</a>
         <a href="#hodowla" class="btn">Poznaj hodowlę</a>
@@ -392,7 +405,7 @@
       <span class="eyebrow">Hodowla Futura</span>
       <h2>Zaczyna się na pastwisku, nie w&nbsp;<span class="gold-script">chłodni</span></h2>
       <p>Futura to nasza własna, ekologiczna hodowla bydła rasy Hereford na Warmii i&nbsp;Mazurach — dziś największa w&nbsp;Polsce, a&nbsp;wkrótce jedna z&nbsp;największych w&nbsp;Europie. Zwierzęta całe życie spędzają na pastwiskach, rosną w&nbsp;swoim tempie i&nbsp;bez przerostów tłuszczu.</p>
-      <p>Prowadzimy każdy etap sami: wypas, ubój, sezonowanie i&nbsp;przygotowanie mięsa. Dlatego wiemy, z&nbsp;którego stada pochodzi stek, który dostajesz — i&nbsp;dlatego smakuje tak, jak smakuje.</p>
+      <p>Prowadzimy każdy etap sami: wypas, ubój, sezonowanie i&nbsp;przygotowanie mięsa. Potem wołowina trafia na nasz grill w&nbsp;Forcie Służew w&nbsp;Warszawie — dlatego wiemy, z&nbsp;którego stada pochodzi stek, który dostajesz.</p>
       <div class="facts">
         <div><b>Rasa Hereford</b><small>Chów ekologiczny, wypas pastwiskowy</small></div>
         <div><b>Warmia i Mazury</b><small>Własne stada hodowli Futura</small></div>
@@ -528,7 +541,7 @@
 
 <!-- O NAS -->
 <section class="about" id="o-nas">
-  <div class="wrap">
+  <div class="wrap about-grid">
     <div class="about-inner">
       <span class="eyebrow">O nas</span>
       <h2>Steakhouse bez białych <span class="gold-script">obrusów</span></h2>
@@ -536,6 +549,7 @@
       <p>Trudno dziś o&nbsp;steka ze sprawdzonego źródła — w&nbsp;większości miejsc nikt nie potrafi powiedzieć, skąd pochodzi mięso. U&nbsp;nas odpowiedź jest prosta: z&nbsp;naszej hodowli na Warmii. Do dań dobieramy wina, a&nbsp;ulubiony kawałek mięsa możesz zabrać do domu albo zamówić przez <a href="https://BEEFshop.pl" style="color:var(--gold);text-decoration:underline">BEEFshop.pl</a>.</p>
       <a href="o-nas.html" class="btn">Cała historia</a>
     </div>
+    <img class="about-image" src="img/firmy.jpg" alt="Wnętrze restauracji BEEFshop &amp; GRILL" />
   </div>
 </section>
 
@@ -592,12 +606,7 @@
       </div>
     </div>
     <div>
-      <iframe
-        class="map-frame"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2445.5!2d21.0!3d52.18!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zFort+S%C5%82u%C5%BCew+1B!5e0!3m2!1spl!2spl!4v1700000000000!5m2!1spl!2spl"
-        width="100%" height="460" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-        title="Mapa dojazdu — BEEFshop &amp; GRILL, Fort Służew 1B, Warszawa" allowfullscreen>
-      </iframe>
+      <img class="fort-image" src="img/HERO.png" alt="BEEFshop &amp; GRILL w zabytkowych murach Fortu Służew" />
     </div>
   </div>
 </section>
@@ -621,7 +630,8 @@
 
 <!-- KONTAKT -->
 <section class="visit" id="kontakt">
-  <div class="wrap visit-grid">
+  <div class="wrap">
+    <div class="visit-grid">
     <div>
       <span class="eyebrow">Kontakt</span>
       <h2 class="serif" style="font-weight:400;font-size:clamp(2rem,4.4vw,3.1rem);line-height:0.92;margin:18px 0 26px;text-wrap:balance">Zarezerwuj stół albo <span class="gold-script">zapytaj o event</span></h2>
@@ -666,6 +676,13 @@
         <button type="submit" class="btn btn-solid">Wyślij wiadomość</button>
       </form>
     </div>
+    </div>
+    <iframe
+      class="map-frame"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2445.5!2d21.0!3d52.18!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zFort+S%C5%82u%C5%BCew+1B!5e0!3m2!1spl!2spl!4v1700000000000!5m2!1spl!2spl"
+      width="100%" height="360" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      title="Mapa dojazdu — BEEFshop &amp; GRILL, Fort Służew 1B, Warszawa" allowfullscreen>
+    </iframe>
   </div>
 </section>
 
