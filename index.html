@@ -1904,15 +1904,55 @@
             range.value = i;
           }
         }
+        var current = 0;
+        var autoTimer = null;
+        var resumeTimer = null;
+        var AUTO_DELAY = 2800; // co ile ms zmienia się stopień sam
+        var RESUME_DELAY = 5000; // po ilu ms bezczynności wraca autoodtwarzanie
+
+        function goToNext() {
+          current = (current + 1) % levels.length;
+          setLevel(current);
+        }
+
+        function startAuto() {
+          stopAuto();
+          autoTimer = setInterval(goToNext, AUTO_DELAY);
+        }
+
+        function stopAuto() {
+          if (autoTimer) {
+            clearInterval(autoTimer);
+            autoTimer = null;
+          }
+        }
+
+        function pauseAutoTemporarily() {
+          stopAuto();
+          if (resumeTimer) clearTimeout(resumeTimer);
+          resumeTimer = setTimeout(startAuto, RESUME_DELAY);
+        }
+
         range.addEventListener("input", function () {
-          setLevel(this.value);
+          current = parseInt(this.value, 10);
+          setLevel(current);
+          pauseAutoTemporarily();
         });
         btns.forEach(function (b) {
-          b.addEventListener("click", function () {
-            setLevel(b.dataset.level);
+          b.addEventListener("mouseenter", function () {
+            current = parseInt(b.dataset.level, 10);
+            setLevel(current);
+            pauseAutoTemporarily();
+          });
+          b.addEventListener("focus", function () {
+            current = parseInt(b.dataset.level, 10);
+            setLevel(current);
+            pauseAutoTemporarily();
           });
         });
+
         setLevel(0);
+        startAuto();
       })();
 
       /* Wideo w hero: na wąskich ekranach i przy oszczędzaniu danych zostaje sam plakat */
