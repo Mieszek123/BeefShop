@@ -1,0 +1,2642 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <!-- ===== TYLKO PODGLĄD: placeholdery dla obrazów, których nie ma w podglądzie (nie wklejać na produkcję) ===== -->
+    <script>
+      (function () {
+        function svg(w, h, label, logo, corner) {
+          var s = logo
+            ? '<svg xmlns="http://www.w3.org/2000/svg" width="' +
+              w +
+              '" height="' +
+              h +
+              '" viewBox="0 0 ' +
+              w +
+              " " +
+              h +
+              '"><text x="0" y="32" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#ffffff">BEEF<tspan fill="#e5c46e">shop</tspan> &amp; GRILL</text></svg>'
+            : '<svg xmlns="http://www.w3.org/2000/svg" width="' +
+              w +
+              '" height="' +
+              h +
+              '" viewBox="0 0 ' +
+              w +
+              " " +
+              h +
+              '">' +
+              '<defs><pattern id="p" width="28" height="28" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="28" height="28" fill="#2b2118"/><rect width="14" height="28" fill="#30251b"/></pattern></defs>' +
+              '<rect width="100%" height="100%" fill="url(#p)"/>' +
+              (corner
+                ? '<text x="97%" y="95%" text-anchor="end" font-family="Arial,sans-serif" font-size="22" fill="#a7ab9e">' +
+                  label +
+                  " — brak pliku w podglądzie</text></svg>"
+                : "") +
+              (corner
+                ? ""
+                : '<text x="50%" y="48%" text-anchor="middle" font-family="Arial,sans-serif" font-size="' +
+                  Math.round(w / 28) +
+                  '" fill="#d8bd85">' +
+                  label +
+                  "</text>" +
+                  '<text x="50%" y="56%" text-anchor="middle" font-family="Arial,sans-serif" font-size="' +
+                  Math.round(w / 48) +
+                  '" fill="#a7ab9e">brak pliku w podglądzie</text></svg>');
+          return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(s);
+        }
+        function fix(img) {
+          if (img.dataset.ph) return;
+          img.dataset.ph = "1";
+          var label = img.getAttribute("src") || "";
+          var logo = !!img.closest(".brand");
+          img.src = logo
+            ? svg(230, 48, "", true)
+            : svg(1600, 1000, label, false);
+        }
+        document.addEventListener(
+          "error",
+          function (e) {
+            if (e.target && e.target.tagName === "IMG") fix(e.target);
+          },
+          true,
+        );
+        document.addEventListener("DOMContentLoaded", function () {
+          document.querySelectorAll("img").forEach(function (img) {
+            if (img.complete && img.naturalWidth === 0) fix(img);
+          });
+          var v = document.getElementById("hero-video");
+          if (v) {
+            v.setAttribute(
+              "poster",
+              svg(1600, 1000, "img/HERO.png (plakat wideo)", false, true),
+            );
+          }
+        });
+      })();
+    </script>
+    <!-- ===== KONIEC BLOKU PODGLĄDU ===== -->
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      BEEFshop &amp; GRILL — steakhouse w Forcie Służew | Wołowina z własnej
+      hodowli
+    </title>
+    <meta
+      name="description"
+      content="Steakhouse casual premium w Forcie Służew w Warszawie. Steki i burgery z wołowiny Hereford z własnej ekologicznej hodowli na Warmii i Mazurach — od pastwiska po talerz."
+    />
+    <meta name="theme-color" content="#14201a" />
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Qwitcher+Grypen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* =========================================================
+     PALETA — trzy kolory bazowe wg ustaleń:
+     1) biel (baza, #ffffff — bez odcienia kremowego)
+     2) zieleń (ciemniejsza, --forest / --forest-2)
+     3) whisky / dym (--smoke, --brown) zamiast dominującej czerni
+     Czcionki, ich rozmiary i kolory pozostają bez zmian.
+     ========================================================= */
+      :root {
+        --black: #0d130f; /* używany wyłącznie jako kolor tekstu na złotych przyciskach */
+        --forest: #14201a;
+        --forest-2: #1b2b22;
+        --smoke: #241b14; /* whisky / dym — zastępuje czarne tła sekcji */
+        --brown: #4a2f1e;
+        --brown-2: #67432b;
+        --gold: #e5c46e;
+        --gold-soft: #d8bd85;
+        --cream: #ffffff; /* baza biała */
+        --muted: #a7ab9e;
+        --line: rgba(
+          255,
+          255,
+          255,
+          0.12
+        ); /* subtelne linie zamiast białych ramek */
+        --line-strong: rgba(255, 255, 255, 0.22);
+        --serif:
+          "TT Norms Pro", "TT Norms", -apple-system, BlinkMacSystemFont,
+          sans-serif;
+        --sans: "Roboto", system-ui, sans-serif;
+        --script: "Qwitcher Grypen", "Brush Script MT", cursive;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        line-height: 0.95;
+      }
+      .gold-script {
+        font-family: var(--script);
+        color: var(--gold);
+        font-style: normal;
+        font-weight: 700;
+        font-size: 1.7em;
+        display: inline-block;
+      }
+      html {
+        scroll-behavior: smooth;
+        background: var(--forest);
+      }
+      body {
+        font-family: var(--sans);
+        background: var(--forest);
+        color: var(--cream);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .serif {
+        font-family: var(--serif);
+      }
+      :focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 3px;
+      }
+      .eyebrow {
+        font-size: 0.72rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 28px;
+        height: 1px;
+        background: var(--gold);
+        opacity: 0.7;
+      }
+
+      /* ================= NAV ================= */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(0, 0, 0, 0.86);
+        backdrop-filter: blur(10px);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 60px;
+        max-height: 76px;
+        padding: 12px 0;
+        gap: 20px;
+      }
+      .brand {
+        font-family: var(--serif);
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        max-height: 60px;
+      }
+      .brand b {
+        color: var(--gold);
+      }
+      .nav ul {
+        display: flex;
+        gap: 22px;
+        list-style: none;
+        font-size: 0.76rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .nav ul a {
+        color: var(--cream);
+        transition: color 0.25s;
+      }
+      .nav ul a:hover {
+        color: var(--gold);
+      }
+      .btn {
+        display: inline-block;
+        font-size: 0.8rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 600;
+        padding: 13px 26px;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        transition: 0.3s;
+        background: transparent;
+        cursor: pointer;
+        font-family: var(--sans);
+      }
+      .btn:hover {
+        background: var(--gold);
+        color: var(--black);
+      }
+      .btn-solid {
+        background: var(--gold);
+        color: var(--black);
+        border-color: var(--gold);
+      }
+      .btn-solid:hover {
+        background: var(--gold-soft);
+        border-color: var(--gold-soft);
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .lang {
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        color: var(--cream);
+      }
+      .lang a.is-active {
+        color: var(--gold);
+      }
+      .nav-cta {
+        display: none;
+        white-space: nowrap;
+      }
+      @media (min-width: 1180px) {
+        .nav-cta {
+          display: inline-block;
+        }
+      }
+      .nav-links {
+        display: none;
+      }
+      @media (min-width: 1180px) {
+        .nav-links {
+          display: flex;
+        }
+      }
+
+      /* Menu mobilne (ok. 60–80% ruchu) */
+      .burger {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 44px;
+        height: 44px;
+        background: none;
+        border: 0;
+        cursor: pointer;
+        padding: 10px;
+      }
+      @media (min-width: 1180px) {
+        .burger {
+          display: none;
+        }
+      }
+      .burger span {
+        display: block;
+        height: 2px;
+        background: var(--cream);
+        transition: 0.3s;
+      }
+      .burger[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .burger[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+      }
+      .burger[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+      .mobile-menu {
+        display: none;
+        background: var(--forest-2);
+        border-top: 1px solid var(--line);
+      }
+      .mobile-menu.open {
+        display: block;
+      }
+      @media (min-width: 1180px) {
+        .mobile-menu {
+          display: none !important;
+        }
+      }
+      .mobile-menu ul {
+        list-style: none;
+        padding: 14px 24px 8px;
+      }
+      .mobile-menu li a {
+        display: block;
+        padding: 13px 0;
+        font-size: 0.86rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--cream);
+        border-bottom: 1px solid var(--line);
+      }
+      .mobile-menu .m-cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 18px 24px 26px;
+      }
+
+      /* ================= HERO (wideo) ================= */
+      .hero {
+        position: relative;
+        min-height: calc(100vh - 60px);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+      .hero video,
+      .hero > img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(9, 9, 9, 0.55) 0%,
+            rgba(11, 11, 11, 0.25) 40%,
+            rgba(7, 7, 7, 0.94) 100%
+          ),
+          linear-gradient(
+            90deg,
+            rgba(20, 32, 26, 0.7) 0%,
+            rgba(7, 7, 7, 0) 60%
+          );
+      }
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        padding: 28px 0;
+        max-width: 760px;
+      }
+      .hero h1 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 4.5vw, 3.6rem);
+        line-height: 0.9;
+        letter-spacing: -0.01em;
+        margin: 12px 0 14px;
+        text-wrap: balance;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--gold);
+      }
+      .hero p {
+        font-size: 1rem;
+        color: var(--cream);
+        max-width: 540px;
+        margin-bottom: 20px;
+        text-wrap: pretty;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .hero-rating {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        font-size: 0.9rem;
+        color: var(--cream);
+      }
+      .hero-rating-stars {
+        color: var(--gold);
+        letter-spacing: 2px;
+        font-size: 1rem;
+      }
+
+      /* Kolejność opowieści: pochodzenie mięsa → restauracja → stół.
+         Uwaga: sekcje bez numeru "order" trafiają na samą górę strony. */
+      header {
+        order: 0;
+      }
+      .hero {
+        order: 1;
+      }
+      .strip {
+        order: 2;
+      }
+      .story {
+        order: 3;
+      }
+      .about {
+        order: 4;
+      }
+      .fort-history {
+        order: 5;
+      }
+      #menu {
+        order: 6;
+      }
+      .done {
+        order: 7;
+      }
+      .gallery {
+        order: 8;
+      }
+      .fort {
+        order: 9;
+      }
+      .reviews {
+        order: 10;
+      }
+      #eventy {
+        order: 11;
+      }
+      .visit {
+        order: 12;
+      }
+      footer {
+        order: 13;
+      }
+
+      /* ================= PASEK ================= */
+      .strip {
+        background: #000;
+        overflow: hidden;
+      }
+      .strip-track {
+        display: flex;
+        gap: 56px;
+        white-space: nowrap;
+        padding: 18px 0;
+        animation: scroll 28s linear infinite;
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--cream);
+      }
+      .strip-track span {
+        display: inline-flex;
+        align-items: center;
+        gap: 56px;
+      }
+      .strip-track span::after {
+        content: "◆";
+        color: var(--cream);
+        font-style: normal;
+        font-size: 0.7rem;
+      }
+      @keyframes scroll {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .strip-track {
+          animation: none;
+        }
+        * {
+          scroll-behavior: auto;
+        }
+      }
+
+      section {
+        padding: 96px 0;
+      }
+      .section-head {
+        max-width: 660px;
+        margin-bottom: 48px;
+      }
+      .section-head h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 4.4vw, 3.2rem);
+        line-height: 0.92;
+        margin: 18px 0 16px;
+        text-wrap: balance;
+      }
+      .section-head p {
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      /* ================= HODOWLA / OD PASTWISKA PO TALERZ ================= */
+      .story {
+        background: #13201a;
+        position: relative;
+        z-index: 3; /* strzałka nachodzi na sekcję "O nas" */
+      }
+
+      /* Ręcznie rysowane strzałki między sekcjami
+         (Hodowla → O nas oraz O nas → Historia miejsca).
+         Kształt to wypełniona linia o zmiennej grubości (jak tusz z pióra),
+         a maska odsłania ją płynnie, gdy strzałka pojawia się na ekranie.
+         Wariant --right to lustrzane odbicie: idzie od lewej do prawej. */
+      .flow-arrow {
+        position: absolute;
+        left: calc(50% - 262px);
+        bottom: -96px;
+        width: 620px;
+        height: auto;
+        overflow: visible;
+        pointer-events: none;
+      }
+      .flow-arrow--right {
+        left: auto;
+        right: calc(50% - 262px);
+        transform: scaleX(-1);
+      }
+      .flow-arrow g path {
+        fill: var(--cream);
+        stroke: var(--cream);
+        stroke-width: 0;
+        stroke-linejoin: round;
+      }
+      .flow-arrow mask path {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 12;
+        stroke-linecap: butt;
+        stroke-dasharray: 1 1;
+        stroke-dashoffset: 0;
+      }
+      .flow-arrow.is-armed mask .draw-line,
+      .flow-arrow.is-armed mask .draw-head {
+        stroke-dashoffset: 1;
+      }
+      .flow-arrow.is-drawn mask .draw-line {
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 1.6s cubic-bezier(0.55, 0.1, 0.35, 1);
+      }
+      .flow-arrow.is-drawn mask .draw-head {
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 0.28s ease-out 1.55s;
+      }
+      @media (max-width: 899px) {
+        .flow-arrow {
+          left: 12%;
+          width: 76%;
+          bottom: -14.6vw;
+        }
+        .flow-arrow--right {
+          left: auto;
+          right: 12%;
+        }
+        /* na małym ekranie strzałka jest pomniejszona — lekko ją pogrubiamy */
+        .flow-arrow g path {
+          stroke-width: 1.4;
+        }
+      }
+      .split {
+        display: grid;
+        gap: 56px;
+        align-items: center;
+      }
+      @media (min-width: 900px) {
+        .split {
+          grid-template-columns: 1.05fr 0.95fr;
+        }
+      }
+      .story-img {
+        position: relative;
+      }
+      .story-img img {
+        width: 100%;
+        height: 520px;
+        object-fit: cover;
+      }
+      .story-text h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 4.4vw, 3.1rem);
+        line-height: 0.92;
+        margin: 18px 0 22px;
+        text-wrap: balance;
+      }
+      .story-text p {
+        color: var(--cream);
+        margin-bottom: 18px;
+        max-width: 62ch;
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        margin-top: 30px;
+      }
+      @media (min-width: 560px) {
+        .facts {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .facts div {
+        padding: 18px 0;
+        border-top: 1px solid var(--line);
+      }
+      .facts b {
+        font-family: var(--serif);
+        color: var(--gold);
+        font-size: 1.05rem;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .facts small {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      .story-text .btn {
+        margin-top: 26px;
+      }
+
+      /* ================= MENU TEKSTOWE ================= */
+      #menu {
+        background: var(--forest);
+      }
+      .chef {
+        max-width: 760px;
+        margin: 0 0 56px;
+        padding: 26px 0 30px;
+        border-top: 1px solid var(--gold);
+        border-bottom: 1px solid var(--line);
+      }
+      .chef .label {
+        font-size: 0.68rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-weight: 700;
+      }
+      .chef h3 {
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: 1.6rem;
+        color: var(--gold);
+        margin: 12px 0 8px;
+      }
+      .chef p {
+        color: var(--cream);
+        font-size: 0.98rem;
+        max-width: 60ch;
+      }
+      .chef .price {
+        font-family: var(--serif);
+        color: var(--gold);
+        font-size: 1.3rem;
+        font-weight: 700;
+        display: block;
+        margin-top: 14px;
+      }
+      .chef .note {
+        color: var(--muted);
+        font-size: 0.84rem;
+        margin-top: 10px;
+      }
+
+      .menu-cols {
+        display: grid;
+        gap: 56px;
+      }
+      @media (min-width: 900px) {
+        .menu-cols {
+          grid-template-columns: 1fr 1fr;
+          gap: 56px 72px;
+        }
+      }
+      .menu-cat h3 {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 1.35rem;
+        color: var(--gold);
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--line-strong);
+        margin-bottom: 6px;
+      }
+      .menu-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px 18px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .menu-item h4 {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 1.08rem;
+        line-height: 1.2;
+      }
+      .menu-item .price {
+        font-family: var(--serif);
+        color: var(--gold);
+        font-size: 1.05rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .menu-item p {
+        grid-column: 1/-1;
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-top: 2px;
+        max-width: 52ch;
+      }
+      .menu-cta-center {
+        text-align: center;
+        margin-top: 56px;
+      }
+
+      /* ================= STOPIEŃ WYSMAŻENIA ================= */
+      .done {
+        background: var(--smoke);
+      }
+      .done-grid {
+        display: grid;
+        gap: 48px;
+        align-items: center;
+      }
+      @media (min-width: 900px) {
+        .done-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .done-stage {
+        position: relative;
+        aspect-ratio: 4/3;
+        background: var(--forest);
+        overflow: hidden;
+      }
+      .done-stage img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.45s ease;
+      }
+      .done-stage img.is-active {
+        opacity: 1;
+      }
+      .done-name {
+        font-family: var(--serif);
+        font-weight: 700;
+        font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+        color: var(--gold);
+        margin: 8px 0 6px;
+      }
+      .done-temp {
+        color: var(--muted);
+        font-size: 0.86rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .done-desc {
+        color: var(--cream);
+        margin: 16px 0 28px;
+        min-height: 76px;
+        max-width: 52ch;
+      }
+      .done-slider {
+        width: 100%;
+        margin: 0;
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+      }
+      .done-slider::-webkit-slider-runnable-track {
+        height: 2px;
+        background: var(--line-strong);
+      }
+      .done-slider::-moz-range-track {
+        height: 2px;
+        background: var(--line-strong);
+      }
+      .done-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--gold);
+        margin-top: -10px;
+        border: 0;
+      }
+      .done-slider::-moz-range-thumb {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--gold);
+        border: 0;
+      }
+      .done-scale {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 14px;
+        gap: 6px;
+      }
+      .done-scale button {
+        background: none;
+        border: 0;
+        cursor: pointer;
+        padding: 4px 0;
+        font-family: var(--sans);
+        font-size: 0.66rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        transition: color 0.25s;
+        flex: 1;
+        text-align: center;
+      }
+      .done-scale button[aria-current="true"] {
+        color: var(--gold);
+      }
+
+      /* ================= O NAS ================= */
+      .about {
+        background: var(--forest-2);
+        position: relative;
+        z-index: 2; /* strzałka nachodzi na sekcję "Historia miejsca" */
+      }
+      .about-grid {
+        display: grid;
+        gap: 48px;
+        align-items: center;
+      }
+      @media (min-width: 900px) {
+        .about-grid {
+          grid-template-columns: 1fr 0.9fr;
+          gap: 72px;
+        }
+      }
+      .about-inner {
+        max-width: 780px;
+      }
+      .about-inner h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 4.4vw, 3.1rem);
+        line-height: 0.92;
+        margin: 18px 0 26px;
+        text-wrap: balance;
+      }
+      .about-inner p {
+        color: var(--cream);
+        font-size: 1.06rem;
+        margin-bottom: 18px;
+        max-width: 65ch;
+      }
+      .about-inner .btn {
+        margin-top: 18px;
+      }
+      .about-image {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        object-position: center;
+        align-self: center;
+      }
+      @media (max-width: 899px) {
+        .about-image {
+          height: 340px;
+        }
+      }
+
+      /* ================= HISTORIA FORTU ================= */
+      .fort-history {
+        background: var(--smoke);
+      }
+      .fort-history-grid {
+        display: grid;
+        gap: 48px;
+        align-items: center;
+      }
+      @media (min-width: 900px) {
+        .fort-history-grid {
+          grid-template-columns: 1fr 0.9fr;
+          gap: 72px;
+        }
+      }
+      .fort-gallery-main {
+        width: 100%;
+        height: 440px;
+        object-fit: cover;
+        object-position: center;
+        transition: opacity 0.25s ease;
+      }
+      .fort-gallery-main.is-fading {
+        opacity: 0;
+      }
+      @media (max-width: 899px) {
+        .fort-gallery-main {
+          height: 320px;
+        }
+      }
+      .fort-thumbs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+        list-style: none;
+      }
+      .fort-thumb {
+        display: block;
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        position: relative;
+        opacity: 0.55;
+        transition: opacity 0.25s;
+      }
+      .fort-thumb::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: var(--gold);
+        transform: scaleX(0);
+        transition: transform 0.25s;
+      }
+      .fort-thumb:hover {
+        opacity: 0.85;
+      }
+      .fort-thumb[aria-pressed="true"] {
+        opacity: 1;
+      }
+      .fort-thumb[aria-pressed="true"]::after {
+        transform: scaleX(1);
+      }
+      .fort-thumb img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        height: auto;
+        object-fit: cover;
+      }
+      .fort-history-text h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 4.4vw, 3.1rem);
+        line-height: 0.92;
+        margin: 18px 0 26px;
+        text-wrap: balance;
+      }
+      .fort-history-text p {
+        color: var(--cream);
+        font-size: 1.06rem;
+        margin-bottom: 18px;
+        max-width: 60ch;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .fort-gallery-main,
+        .fort-thumb,
+        .fort-thumb::after {
+          transition: none;
+        }
+      }
+
+      /* ================= EVENTY ================= */
+      #eventy {
+        background: var(--forest);
+      }
+      /* długie słowo w nagłówku — na wąskich ekranach zmniejszamy je, żeby się mieściło */
+      #eventy .section-head .gold-script {
+        font-size: min(1.7em, 11.5vw);
+      }
+      .event-facts {
+        display: grid;
+        gap: 0;
+        max-width: 900px;
+      }
+      .event-facts .row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        padding: 18px 0;
+        border-top: 1px solid var(--line);
+      }
+      @media (min-width: 700px) {
+        .event-facts .row {
+          grid-template-columns: 200px 1fr;
+          gap: 24px;
+        }
+      }
+      .event-facts .row:last-child {
+        border-bottom: 1px solid var(--line);
+      }
+      .event-facts dt {
+        color: var(--muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        padding-top: 4px;
+      }
+      .event-facts dd {
+        color: var(--cream);
+      }
+      .event-cta {
+        margin-top: 40px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      /* ================= FORT ================= */
+      .fort {
+        background: #13201a;
+      }
+      .fort-grid {
+        display: grid;
+        gap: 48px;
+        align-items: start;
+      }
+      @media (min-width: 900px) {
+        .fort-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .fort-text h2 {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(2rem, 4.4vw, 3.1rem);
+        line-height: 0.92;
+        margin: 18px 0 22px;
+        text-wrap: balance;
+      }
+      .fort-text p {
+        color: var(--cream);
+        margin-bottom: 18px;
+        max-width: 60ch;
+      }
+      .fort-steps {
+        margin: 26px 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: step;
+      }
+      .fort-steps li {
+        counter-increment: step;
+        position: relative;
+        padding: 14px 0 14px 44px;
+        border-top: 1px solid var(--line);
+        color: var(--cream);
+        font-size: 0.96rem;
+      }
+      .fort-steps li:last-child {
+        border-bottom: 1px solid var(--line);
+      }
+      .fort-steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 14px;
+        font-family: var(--serif);
+        color: var(--gold);
+        font-size: 1.05rem;
+        font-weight: 700;
+      }
+      .map-frame {
+        width: 100%;
+        height: 460px;
+        border: 0;
+        filter: grayscale(0.3) brightness(0.9);
+        transition: filter 0.4s;
+      }
+      .map-frame:hover {
+        filter: grayscale(0) brightness(1);
+      }
+      .fort .cta-box {
+        margin-top: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .fort-image {
+        width: 100%;
+        min-height: 460px;
+        object-fit: cover;
+      }
+
+      /* ================= GALERIA ================= */
+      .gallery {
+        background: var(--forest-2);
+      }
+      .collage {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 150px;
+        grid-auto-flow: dense;
+        gap: 10px;
+        list-style: none;
+      }
+      @media (min-width: 700px) {
+        .collage {
+          grid-template-columns: repeat(4, 1fr);
+          grid-auto-rows: 190px;
+          gap: 12px;
+        }
+      }
+      .collage .g-wide {
+        grid-column: span 2;
+      }
+      .collage .g-tall {
+        grid-row: span 2;
+      }
+      .collage .g-big {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .collage-item {
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        background: var(--brown);
+        overflow: hidden;
+        cursor: zoom-in;
+      }
+      .collage-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition:
+          transform 0.5s ease,
+          filter 0.5s ease;
+        filter: brightness(0.92);
+      }
+      .collage-item:hover img,
+      .collage-item:focus-visible img {
+        transform: scale(1.06);
+        filter: brightness(1);
+      }
+      .collage-item:focus-visible {
+        outline-offset: -2px;
+      }
+      .gallery-cta {
+        margin-top: 40px;
+      }
+
+      /* Podgląd pełnego zdjęcia */
+      .lightbox {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        background: transparent;
+        color: var(--cream);
+      }
+      .lightbox::backdrop {
+        background: rgba(10, 8, 6, 0.94);
+      }
+      .lightbox[open] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .lightbox-figure {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        padding: 64px 72px 24px;
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .lightbox-img {
+        max-width: min(1400px, 100%);
+        max-height: calc(100vh - 140px);
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+      .lightbox-caption {
+        font-size: 0.92rem;
+        color: var(--muted);
+        text-align: center;
+      }
+      .lightbox-caption span {
+        color: var(--gold);
+        margin-right: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+      .lightbox-btn {
+        position: absolute;
+        background: none;
+        border: 1px solid var(--line-strong);
+        color: var(--cream);
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+        line-height: 1;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        transition:
+          border-color 0.25s,
+          color 0.25s;
+      }
+      .lightbox-btn:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .lightbox-close {
+        top: 12px;
+        right: 12px;
+      }
+      .lightbox-prev {
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .lightbox-next {
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      @media (max-width: 699px) {
+        .lightbox-figure {
+          padding: 64px 12px 80px;
+        }
+        .lightbox-prev,
+        .lightbox-next {
+          top: auto;
+          bottom: 16px;
+          transform: none;
+        }
+        .lightbox-prev {
+          left: calc(50% - 60px);
+        }
+        .lightbox-next {
+          right: calc(50% - 60px);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .collage-item img {
+          transition: none;
+        }
+      }
+
+      /* ================= OPINIE ================= */
+      .reviews {
+        background: #1a2b22;
+        text-align: center;
+      }
+      .reviews .score {
+        font-family: var(--serif);
+        font-size: 3rem;
+        color: var(--gold);
+        font-weight: 700;
+        line-height: 1;
+      }
+      .reviews .stars {
+        color: var(--gold);
+        letter-spacing: 3px;
+        font-size: 1.1rem;
+        margin: 10px 0 6px;
+      }
+      .reviews .count {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .review-list {
+        display: grid;
+        gap: 24px;
+        margin-top: 44px;
+        text-align: left;
+      }
+      @media (min-width: 800px) {
+        .review-list {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .review-list blockquote {
+        border-left: 2px solid var(--gold);
+        padding-left: 20px;
+      }
+      .review-list p {
+        color: var(--cream);
+        font-size: 0.95rem;
+      }
+      .review-list cite {
+        display: block;
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-style: normal;
+      }
+
+      /* ================= KONTAKT ================= */
+      .visit {
+        background: #241b14;
+      }
+      .visit-grid {
+        display: grid;
+        gap: 48px;
+        align-items: start;
+      }
+      @media (min-width: 900px) {
+        .visit-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .info {
+        border-top: 1px solid var(--line);
+        padding: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .info:last-of-type {
+        border-bottom: 1px solid var(--line);
+      }
+      .info span {
+        color: var(--muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+      .info b {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 1.15rem;
+        text-align: right;
+      }
+      .visit .cta-box {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .visit-map {
+        align-self: stretch;
+        min-height: 360px;
+      }
+      .visit-map .map-frame {
+        display: block;
+        height: 100%;
+        min-height: 360px;
+      }
+
+      /* ================= FOOTER ================= */
+      footer {
+        background: #000;
+        border-top: 1px solid var(--line);
+        padding: 64px 0 40px;
+      }
+      .foot {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 34px;
+        align-items: flex-start;
+      }
+      .foot .brand {
+        font-size: 1.6rem;
+      }
+      .foot p {
+        color: var(--cream);
+        max-width: 340px;
+        margin-top: 14px;
+        font-size: 0.92rem;
+      }
+      .foot-links {
+        display: flex;
+        gap: 60px;
+        flex-wrap: wrap;
+      }
+      .foot-col h4 {
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 16px;
+      }
+      .foot-col a,
+      .foot-col p {
+        display: block;
+        color: var(--cream);
+        font-size: 0.92rem;
+        margin-bottom: 9px;
+        transition: color 0.25s;
+      }
+      .foot-col a:hover {
+        color: var(--gold);
+      }
+      .copyright {
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--cream);
+        font-size: 0.8rem;
+      }
+      .copyright b {
+        color: var(--cream);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap nav">
+        <div class="brand">
+          <a href="index.html"
+            ><img
+              src="img/logo3.png"
+              alt="BEEFshop &amp; GRILL"
+              style="max-height: 60px"
+          /></a>
+        </div>
+        <nav class="nav-links" aria-label="Menu główne">
+          <ul>
+            <li><a href="#hodowla">Hodowla</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#o-nas">O nas</a></li>
+            <li><a href="#opinie">Opinie</a></li>
+            <li><a href="#eventy">Eventy</a></li>
+            <li><a href="galeria.html">Galeria</a></li>
+            <li><a href="#fort">Jak dojechać</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+          </ul>
+        </nav>
+        <div class="nav-right">
+          <!-- Wersja EN: tłumaczenie DeepL, wtyczka wielojęzyczna w WordPressie -->
+          <span class="lang"
+            ><a href="#" class="is-active">PL</a> / <a href="/en/">EN</a></span
+          >
+          <a href="tel:+48698 052 043" class="btn btn-solid nav-cta"
+            >Zadzwoń teraz</a
+          >
+          <button
+            class="burger"
+            id="burger"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-label="Otwórz menu"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <ul>
+          <li><a href="#hodowla">Hodowla</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#o-nas">O nas</a></li>
+          <li><a href="#opinie">Opinie</a></li>
+          <li><a href="#eventy">Eventy</a></li>
+          <li><a href="galeria.html">Galeria</a></li>
+          <li><a href="#fort">Jak dojechać</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+        <div class="m-cta">
+          <a href="tel:+48698 052 043" class="btn btn-solid">Zadzwoń</a>
+          <a
+            href="https://www.google.com/maps/dir/?api=1&amp;destination=Fort+S%C5%82u%C5%BCew+1B%2C+02-787+Warszawa"
+            target="_blank"
+            rel="noopener"
+            class="btn"
+            >Wyznacz trasę</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO — wideo w tle.
+     Uwaga na wagę pliku: plik MP4 max ok. 6–8 MB, 1080p, bez ścieżki dźwiękowej,
+     na mobile ładowany jest wyłącznie plakat (patrz skrypt na dole strony). -->
+    <section class="hero" id="start">
+      <video
+        id="hero-video"
+        poster="img/HERO.png"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-hidden="true"
+      >
+        <source src="img/vidhero.MP4" type="video/mp4" />
+      </video>
+      <div class="wrap">
+        <div class="hero-inner">
+          <span class="eyebrow">Od pastwiska po talerz</span>
+          <h1>
+            Jedyna w&nbsp;Polsce wołowina rasy
+            <span class="gold-script">Hereford</span>
+          </h1>
+          <p>
+            BEEFshop &amp; GRILL to steakhouse w&nbsp;Warszawie, w&nbsp;którym
+            znamy drogę każdego steku: od pastwiska na Warmii aż po Twój stół
+            w&nbsp;zabytkowych murach fortu.
+          </p>
+          <div class="hero-actions">
+            <a href="tel:+48698 052 043" class="btn btn-solid">Zadzwoń teraz</a>
+            <a href="#hodowla" class="btn">Poznaj hodowlę</a>
+          </div>
+          <div class="hero-rating">
+            <span class="hero-rating-stars">★★★★★</span>
+            <span>4,6 na podstawie 1050 opinii Google</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="strip" aria-hidden="true">
+      <div class="strip-track">
+        <span>Własna hodowla ekologiczna</span
+        ><span>800 sztuk rasy Hereford</span><span>Warmia i Mazury</span
+        ><span>Sezonowanie na sucho i mokro</span>
+        <span>Własna hodowla ekologiczna</span
+        ><span>800 sztuk rasy Hereford</span><span>Warmia i Mazury</span
+        ><span>Sezonowanie na sucho i mokro</span>
+      </div>
+    </div>
+
+    <!-- HODOWLA — główna oś opowieści strony -->
+    <section class="story" id="hodowla">
+      <div class="wrap split">
+        <div class="story-img">
+          <img
+            src="img/HEREFORD.png"
+            alt="Bydło rasy Hereford na pastwisku hodowli Futura na Warmii"
+          />
+        </div>
+        <div class="story-text">
+          <span class="eyebrow">Hodowla Futura</span>
+          <h2>
+            Zaczyna się na &nbsp;<span class="gold-script"
+              >pastwisku...</span
+            >
+          </h2>
+          <p>
+            Futura to nasza własna, ekologiczna hodowla bydła rasy Hereford na
+            Warmii i&nbsp;Mazurach — dziś największa w&nbsp;Polsce,
+            a&nbsp;wkrótce jedna z&nbsp;największych w&nbsp;Europie. Zwierzęta
+            całe życie spędzają na pastwiskach, rosną w&nbsp;swoim tempie
+            i&nbsp;bez przerostów tłuszczu.
+          </p>
+          <p>
+            Prowadzimy każdy etap sami: wypas, ubój, sezonowanie
+            i&nbsp;przygotowanie mięsa. Potem wołowina trafia na nasz grill
+            w&nbsp;Forcie Służew w&nbsp;Warszawie — dlatego wiemy,
+            z&nbsp;którego stada pochodzi stek, który dostajesz.
+          </p>
+          <div class="facts">
+            <div>
+              <b>Rasa Hereford</b
+              ><small>Chów ekologiczny, wypas pastwiskowy</small>
+            </div>
+            <div>
+              <b>Warmia i Mazury</b><small>Własne stada hodowli Futura</small>
+            </div>
+            <div>
+              <b>Sezonowanie</b><small>Dojrzewanie na sucho i na mokro</small>
+            </div>
+            <div>
+              <b>Pełna kontrola</b
+              ><small>Od paszy po talerz — bez pośredników</small>
+            </div>
+          </div>
+          <a href="hodowla.html" class="btn">Zobacz, jak hodujemy</a>
+        </div>
+      </div>
+      <svg
+        class="flow-arrow"
+        viewBox="0 0 620 190"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <mask id="story-arrow-draw" maskUnits="userSpaceOnUse" x="-20" y="-20" width="660" height="230">
+            <path class="draw-line" pathLength="1" d="M604.0 36.0 C600.7 44.7 601.3 54.8 594.0 62.0 C586.7 69.2 575.7 74.3 560.0 79.0 C544.3 83.7 521.7 88.8 500.0 90.0 C478.3 91.2 455.0 90.0 430.0 86.0 C405.0 82.0 376.7 74.7 350.0 66.0 C323.3 57.3 295.7 43.5 270.0 34.0 C244.3 24.5 218.7 13.0 196.0 9.0 C173.3 5.0 152.3 5.5 134.0 10.0 C115.7 14.5 99.7 24.3 86.0 36.0 C72.3 47.7 61.2 65.0 52.0 80.0 C42.8 95.0 36.3 111.0 31.0 126.0 C25.7 141.0 23.7 155.3 20.0 170.0" />
+            <path class="draw-head" pathLength="1" d="M20.0 170.0 Q27.2 161.7 35.6 154.5" />
+            <path class="draw-head" pathLength="1" d="M20.0 170.0 Q17.2 159.3 12.9 149.2" />
+          </mask>
+        </defs>
+        <g mask="url(#story-arrow-draw)">
+          <path d="M603.7 35.9 L603.5 36.4 L603.3 37.0 L603.1 37.6 L603.0 38.1 L602.8 38.7 L602.7 39.3 L602.5 39.8 L602.4 40.4 L602.2 41.0 L602.1 41.5 L601.9 42.1 L601.8 42.6 L601.6 43.2 L601.5 43.8 L601.3 44.3 L601.2 44.9 L601.0 45.5 L600.9 46.0 L600.7 46.6 L600.6 47.1 L600.4 47.7 L600.2 48.2 L600.0 48.8 L599.9 49.3 L599.7 49.9 L599.5 50.4 L599.3 51.0 L599.1 51.5 L598.9 52.0 L598.7 52.6 L598.4 53.1 L598.2 53.6 L598.0 54.2 L597.7 54.7 L597.5 55.2 L597.2 55.7 L596.9 56.2 L596.6 56.7 L596.3 57.2 L596.0 57.7 L595.6 58.2 L595.3 58.6 L594.9 59.1 L594.6 59.6 L594.2 60.1 L593.8 60.5 L593.4 61.0 L593.0 61.4 L592.5 61.9 L592.1 62.3 L591.6 62.7 L591.2 63.2 L590.7 63.6 L590.2 64.0 L589.7 64.4 L589.2 64.8 L588.6 65.2 L588.1 65.6 L587.5 66.0 L587.0 66.4 L586.4 66.8 L585.8 67.2 L585.2 67.6 L584.6 68.0 L584.0 68.3 L583.3 68.7 L582.7 69.1 L582.0 69.4 L581.4 69.8 L580.7 70.1 L580.0 70.5 L579.3 70.8 L578.6 71.2 L577.9 71.5 L577.2 71.9 L576.4 72.2 L575.7 72.5 L574.9 72.9 L574.1 73.2 L573.3 73.5 L572.5 73.8 L571.7 74.2 L570.9 74.5 L570.1 74.8 L569.2 75.1 L568.4 75.4 L567.5 75.7 L566.6 76.0 L565.7 76.3 L564.8 76.6 L563.9 76.9 L562.9 77.2 L562.0 77.5 L561.0 77.8 L560.1 78.1 L559.1 78.4 L558.1 78.7 L557.1 79.0 L556.0 79.3 L555.0 79.5 L553.9 79.8 L552.9 80.1 L551.8 80.4 L550.7 80.7 L549.6 81.0 L548.5 81.2 L547.3 81.5 L546.2 81.8 L545.1 82.0 L543.9 82.3 L542.7 82.6 L541.5 82.8 L540.3 83.1 L539.1 83.3 L537.9 83.6 L536.7 83.8 L535.4 84.1 L534.2 84.3 L532.9 84.6 L531.7 84.8 L530.4 85.0 L529.1 85.2 L527.8 85.5 L526.6 85.7 L525.3 85.9 L524.0 86.1 L522.6 86.3 L521.3 86.5 L520.0 86.6 L518.7 86.8 L517.4 87.0 L516.0 87.1 L514.7 87.3 L513.4 87.5 L512.0 87.6 L510.7 87.7 L509.3 87.9 L508.0 88.0 L506.6 88.1 L505.3 88.2 L503.9 88.3 L502.6 88.4 L501.2 88.5 L499.8 88.6 L498.5 88.6 L497.1 88.7 L495.7 88.7 L494.3 88.8 L493.0 88.8 L491.6 88.9 L490.2 88.9 L488.8 88.9 L487.4 88.9 L486.0 88.9 L484.6 88.9 L483.2 88.9 L481.8 88.9 L480.4 88.9 L479.0 88.9 L477.6 88.8 L476.1 88.8 L474.7 88.7 L473.3 88.7 L471.9 88.6 L470.4 88.6 L469.0 88.5 L467.5 88.4 L466.1 88.3 L464.6 88.2 L463.2 88.1 L461.7 88.0 L460.2 87.9 L458.8 87.8 L457.3 87.7 L455.8 87.5 L454.3 87.4 L452.8 87.2 L451.3 87.1 L449.8 86.9 L448.3 86.8 L446.8 86.6 L445.3 86.4 L443.8 86.2 L442.3 86.0 L440.7 85.8 L439.2 85.6 L437.7 85.4 L436.1 85.2 L434.6 84.9 L433.0 84.7 L431.5 84.5 L429.9 84.2 L428.3 84.0 L426.8 83.7 L425.2 83.4 L423.6 83.1 L422.0 82.8 L420.4 82.6 L418.8 82.2 L417.2 81.9 L415.6 81.6 L414.0 81.3 L412.3 81.0 L410.7 80.6 L409.1 80.3 L407.4 79.9 L405.8 79.6 L404.1 79.2 L402.5 78.8 L400.8 78.5 L399.2 78.1 L397.5 77.7 L395.9 77.3 L394.2 76.9 L392.5 76.5 L390.8 76.1 L389.2 75.6 L387.5 75.2 L385.8 74.8 L384.1 74.3 L382.5 73.9 L380.8 73.4 L379.1 73.0 L377.4 72.5 L375.7 72.0 L374.0 71.6 L372.4 71.1 L370.7 70.6 L369.0 70.1 L367.3 69.6 L365.6 69.1 L363.9 68.6 L362.2 68.1 L360.6 67.5 L358.9 67.0 L357.2 66.5 L355.5 65.9 L353.8 65.4 L352.2 64.8 L350.5 64.3 L348.8 63.7 L347.1 63.1 L345.4 62.5 L343.8 62.0 L342.1 61.4 L340.4 60.8 L338.7 60.1 L337.1 59.5 L335.4 58.9 L333.7 58.3 L332.0 57.6 L330.3 57.0 L328.7 56.4 L327.0 55.7 L325.3 55.0 L323.6 54.4 L322.0 53.7 L320.3 53.0 L318.6 52.4 L316.9 51.7 L315.3 51.0 L313.6 50.3 L311.9 49.6 L310.2 49.0 L308.6 48.3 L306.9 47.6 L305.2 46.9 L303.5 46.2 L301.9 45.5 L300.2 44.8 L298.6 44.1 L296.9 43.5 L295.2 42.8 L293.6 42.1 L291.9 41.4 L290.3 40.7 L288.6 40.1 L287.0 39.4 L285.3 38.7 L283.7 38.1 L282.1 37.4 L280.4 36.7 L278.8 36.1 L277.2 35.4 L275.5 34.8 L273.9 34.1 L272.3 33.5 L270.7 32.9 L269.0 32.2 L267.4 31.6 L265.8 31.0 L264.2 30.3 L262.6 29.7 L261.0 29.1 L259.4 28.5 L257.8 27.9 L256.2 27.3 L254.6 26.6 L253.0 26.0 L251.4 25.4 L249.8 24.8 L248.2 24.2 L246.7 23.6 L245.1 23.1 L243.5 22.5 L241.9 21.9 L240.4 21.3 L238.8 20.7 L237.2 20.2 L235.7 19.6 L234.1 19.1 L232.6 18.5 L231.0 18.0 L229.5 17.4 L227.9 16.9 L226.4 16.4 L224.8 15.9 L223.3 15.4 L221.8 14.9 L220.3 14.4 L218.7 14.0 L217.2 13.5 L215.7 13.1 L214.2 12.6 L212.7 12.2 L211.2 11.8 L209.7 11.4 L208.2 11.0 L206.8 10.7 L205.3 10.3 L203.8 10.0 L202.4 9.6 L200.9 9.3 L199.5 9.0 L198.0 8.7 L196.6 8.4 L195.1 8.2 L193.7 7.9 L192.3 7.7 L190.9 7.5 L189.5 7.3 L188.0 7.1 L186.6 6.9 L185.3 6.7 L183.9 6.6 L182.5 6.4 L181.1 6.3 L179.7 6.2 L178.4 6.1 L177.0 6.0 L175.6 5.9 L174.3 5.8 L172.9 5.8 L171.6 5.7 L170.3 5.7 L168.9 5.6 L167.6 5.6 L166.3 5.6 L165.0 5.6 L163.7 5.7 L162.4 5.7 L161.1 5.7 L159.8 5.8 L158.5 5.8 L157.2 5.9 L155.9 6.0 L154.7 6.1 L153.4 6.2 L152.2 6.3 L150.9 6.5 L149.7 6.6 L148.4 6.8 L147.2 6.9 L146.0 7.1 L144.7 7.3 L143.5 7.5 L142.3 7.7 L141.1 7.9 L139.9 8.2 L138.7 8.4 L137.6 8.7 L136.4 8.9 L135.2 9.2 L134.1 9.5 L132.9 9.8 L131.8 10.1 L130.6 10.4 L129.5 10.8 L128.3 11.1 L127.2 11.5 L126.1 11.8 L125.0 12.2 L123.9 12.6 L122.8 13.0 L121.7 13.4 L120.6 13.9 L119.5 14.3 L118.4 14.8 L117.4 15.2 L116.3 15.7 L115.3 16.2 L114.2 16.7 L113.2 17.2 L112.1 17.7 L111.1 18.2 L110.1 18.7 L109.1 19.3 L108.0 19.8 L107.0 20.4 L106.0 21.0 L105.0 21.5 L104.1 22.1 L103.1 22.7 L102.1 23.3 L101.1 24.0 L100.2 24.6 L99.2 25.2 L98.3 25.9 L97.3 26.5 L96.4 27.2 L95.5 27.8 L94.5 28.5 L93.6 29.2 L92.7 29.9 L91.8 30.6 L90.9 31.3 L90.0 32.0 L89.1 32.7 L88.2 33.4 L87.4 34.2 L86.5 34.9 L85.6 35.7 L84.8 36.5 L83.9 37.2 L83.1 38.0 L82.2 38.8 L81.4 39.6 L80.6 40.4 L79.8 41.3 L79.0 42.1 L78.2 42.9 L77.4 43.8 L76.6 44.6 L75.8 45.5 L75.0 46.4 L74.2 47.2 L73.5 48.1 L72.7 49.0 L71.9 49.9 L71.2 50.8 L70.4 51.7 L69.7 52.6 L69.0 53.6 L68.3 54.5 L67.5 55.4 L66.8 56.4 L66.1 57.3 L65.4 58.3 L64.7 59.2 L64.0 60.2 L63.3 61.1 L62.7 62.1 L62.0 63.0 L61.3 64.0 L60.7 65.0 L60.0 65.9 L59.4 66.9 L58.7 67.9 L58.1 68.8 L57.5 69.8 L56.8 70.8 L56.2 71.7 L55.6 72.7 L55.0 73.7 L54.4 74.6 L53.8 75.6 L53.2 76.6 L52.6 77.5 L52.1 78.5 L51.5 79.5 L50.9 80.4 L50.4 81.4 L49.8 82.3 L49.3 83.3 L48.7 84.3 L48.2 85.2 L47.6 86.2 L47.1 87.2 L46.6 88.1 L46.1 89.1 L45.6 90.1 L45.1 91.0 L44.6 92.0 L44.1 92.9 L43.6 93.9 L43.1 94.9 L42.6 95.8 L42.2 96.8 L41.7 97.8 L41.3 98.7 L40.8 99.7 L40.4 100.7 L39.9 101.6 L39.5 102.6 L39.0 103.6 L38.6 104.5 L38.2 105.5 L37.8 106.5 L37.4 107.4 L37.0 108.4 L36.6 109.4 L36.2 110.3 L35.8 111.3 L35.4 112.3 L35.0 113.2 L34.6 114.2 L34.2 115.1 L33.9 116.1 L33.5 117.1 L33.1 118.0 L32.8 119.0 L32.4 119.9 L32.1 120.9 L31.7 121.8 L31.4 122.8 L31.1 123.7 L30.7 124.7 L30.4 125.6 L30.1 126.5 L29.8 127.5 L29.5 128.4 L29.2 129.4 L28.9 130.3 L28.6 131.2 L28.3 132.2 L28.0 133.1 L27.7 134.0 L27.5 135.0 L27.2 135.9 L26.9 136.8 L26.7 137.8 L26.4 138.7 L26.2 139.6 L25.9 140.5 L25.7 141.5 L25.5 142.4 L25.2 143.3 L25.0 144.2 L24.8 145.1 L24.5 146.1 L24.3 147.0 L24.1 147.9 L23.9 148.8 L23.7 149.7 L23.5 150.6 L23.3 151.6 L23.0 152.5 L22.8 153.4 L22.6 154.3 L22.4 155.2 L22.2 156.1 L22.0 157.0 L21.8 157.9 L21.6 158.9 L21.4 159.8 L21.2 160.7 L21.0 161.6 L20.8 162.5 L20.6 163.4 L20.4 164.3 L20.2 165.2 L20.0 166.1 L19.8 167.1 L19.5 168.0 L19.3 168.9 L19.1 169.8 L20.9 170.2 L21.1 169.3 L21.3 168.4 L21.5 167.5 L21.7 166.5 L21.9 165.6 L22.2 164.7 L22.4 163.8 L22.6 162.9 L22.8 162.0 L23.0 161.1 L23.2 160.2 L23.4 159.3 L23.6 158.3 L23.8 157.4 L24.0 156.5 L24.2 155.6 L24.4 154.7 L24.6 153.8 L24.8 152.9 L25.0 152.0 L25.2 151.0 L25.5 150.1 L25.7 149.2 L25.9 148.3 L26.1 147.4 L26.3 146.5 L26.5 145.6 L26.8 144.7 L27.0 143.7 L27.2 142.8 L27.5 141.9 L27.7 141.0 L28.0 140.1 L28.2 139.2 L28.5 138.2 L28.7 137.3 L29.0 136.4 L29.2 135.5 L29.5 134.6 L29.8 133.6 L30.1 132.7 L30.4 131.8 L30.6 130.9 L30.9 129.9 L31.2 129.0 L31.5 128.1 L31.9 127.1 L32.2 126.2 L32.5 125.3 L32.8 124.3 L33.1 123.4 L33.5 122.4 L33.8 121.5 L34.2 120.6 L34.5 119.6 L34.9 118.7 L35.2 117.7 L35.6 116.8 L36.0 115.8 L36.3 114.9 L36.7 113.9 L37.1 113.0 L37.5 112.0 L37.9 111.1 L38.3 110.1 L38.7 109.1 L39.1 108.2 L39.5 107.2 L39.9 106.3 L40.3 105.3 L40.8 104.3 L41.2 103.4 L41.6 102.4 L42.1 101.5 L42.5 100.5 L43.0 99.6 L43.4 98.6 L43.9 97.6 L44.4 96.7 L44.8 95.7 L45.3 94.8 L45.8 93.8 L46.3 92.9 L46.8 91.9 L47.3 90.9 L47.8 90.0 L48.3 89.0 L48.8 88.1 L49.3 87.1 L49.9 86.2 L50.4 85.2 L50.9 84.3 L51.5 83.3 L52.0 82.4 L52.6 81.4 L53.2 80.4 L53.7 79.5 L54.3 78.5 L54.9 77.6 L55.5 76.6 L56.1 75.7 L56.7 74.7 L57.3 73.8 L57.9 72.8 L58.5 71.8 L59.1 70.9 L59.8 69.9 L60.4 69.0 L61.0 68.0 L61.7 67.1 L62.3 66.1 L63.0 65.1 L63.7 64.2 L64.3 63.2 L65.0 62.3 L65.7 61.3 L66.4 60.4 L67.0 59.5 L67.7 58.5 L68.4 57.6 L69.2 56.7 L69.9 55.8 L70.6 54.8 L71.3 53.9 L72.0 53.0 L72.8 52.1 L73.5 51.2 L74.3 50.4 L75.0 49.5 L75.8 48.6 L76.6 47.7 L77.3 46.9 L78.1 46.0 L78.9 45.2 L79.7 44.4 L80.5 43.6 L81.3 42.7 L82.1 41.9 L82.9 41.1 L83.7 40.4 L84.5 39.6 L85.4 38.8 L86.2 38.1 L87.1 37.3 L87.9 36.6 L88.8 35.8 L89.6 35.1 L90.5 34.4 L91.4 33.7 L92.2 33.0 L93.1 32.3 L94.0 31.6 L94.9 30.9 L95.8 30.3 L96.7 29.6 L97.7 29.0 L98.6 28.3 L99.5 27.7 L100.4 27.1 L101.4 26.4 L102.3 25.8 L103.3 25.2 L104.2 24.6 L105.2 24.1 L106.2 23.5 L107.2 22.9 L108.1 22.4 L109.1 21.8 L110.1 21.3 L111.1 20.8 L112.1 20.2 L113.1 19.7 L114.2 19.2 L115.2 18.7 L116.2 18.3 L117.2 17.8 L118.3 17.3 L119.3 16.9 L120.4 16.5 L121.5 16.0 L122.5 15.6 L123.6 15.2 L124.7 14.8 L125.8 14.4 L126.8 14.1 L127.9 13.7 L129.0 13.4 L130.1 13.0 L131.3 12.7 L132.4 12.4 L133.5 12.1 L134.6 11.8 L135.8 11.5 L136.9 11.3 L138.1 11.0 L139.2 10.8 L140.4 10.5 L141.6 10.3 L142.8 10.1 L143.9 9.9 L145.1 9.7 L146.3 9.5 L147.5 9.4 L148.7 9.2 L149.9 9.1 L151.2 8.9 L152.4 8.8 L153.6 8.7 L154.9 8.6 L156.1 8.5 L157.4 8.4 L158.6 8.4 L159.9 8.3 L161.2 8.2 L162.4 8.2 L163.7 8.2 L165.0 8.2 L166.3 8.2 L167.6 8.2 L168.9 8.2 L170.2 8.2 L171.5 8.3 L172.8 8.3 L174.1 8.4 L175.5 8.5 L176.8 8.6 L178.2 8.7 L179.5 8.8 L180.8 8.9 L182.2 9.0 L183.6 9.2 L184.9 9.4 L186.3 9.5 L187.7 9.7 L189.1 9.9 L190.5 10.1 L191.9 10.4 L193.2 10.6 L194.7 10.8 L196.1 11.1 L197.5 11.4 L198.9 11.7 L200.3 12.0 L201.8 12.3 L203.2 12.6 L204.7 13.0 L206.1 13.3 L207.6 13.7 L209.0 14.1 L210.5 14.5 L212.0 14.9 L213.4 15.3 L214.9 15.7 L216.4 16.2 L217.9 16.6 L219.4 17.1 L220.9 17.6 L222.4 18.1 L224.0 18.5 L225.5 19.1 L227.0 19.6 L228.5 20.1 L230.1 20.6 L231.6 21.2 L233.2 21.7 L234.7 22.2 L236.3 22.8 L237.8 23.4 L239.4 23.9 L241.0 24.5 L242.5 25.1 L244.1 25.7 L245.7 26.3 L247.3 26.9 L248.8 27.5 L250.4 28.1 L252.0 28.7 L253.6 29.3 L255.2 29.9 L256.8 30.5 L258.4 31.1 L260.0 31.7 L261.6 32.3 L263.2 33.0 L264.8 33.6 L266.4 34.2 L268.0 34.8 L269.6 35.5 L271.2 36.1 L272.9 36.7 L274.5 37.4 L276.1 38.0 L277.7 38.7 L279.4 39.3 L281.0 40.0 L282.6 40.7 L284.3 41.3 L285.9 42.0 L287.6 42.7 L289.2 43.3 L290.9 44.0 L292.5 44.7 L294.2 45.4 L295.8 46.0 L297.5 46.7 L299.1 47.4 L300.8 48.1 L302.5 48.8 L304.1 49.5 L305.8 50.2 L307.5 50.9 L309.2 51.5 L310.8 52.2 L312.5 52.9 L314.2 53.6 L315.9 54.3 L317.6 55.0 L319.2 55.6 L320.9 56.3 L322.6 57.0 L324.3 57.7 L326.0 58.3 L327.7 59.0 L329.3 59.6 L331.0 60.3 L332.7 60.9 L334.4 61.5 L336.1 62.2 L337.8 62.8 L339.5 63.4 L341.1 64.0 L342.8 64.6 L344.5 65.2 L346.2 65.8 L347.9 66.3 L349.6 66.9 L351.3 67.5 L353.0 68.0 L354.7 68.6 L356.3 69.1 L358.0 69.7 L359.7 70.2 L361.4 70.7 L363.1 71.3 L364.8 71.8 L366.5 72.3 L368.2 72.8 L369.9 73.3 L371.6 73.8 L373.3 74.3 L375.0 74.7 L376.7 75.2 L378.3 75.7 L380.0 76.1 L381.7 76.6 L383.4 77.0 L385.1 77.5 L386.8 77.9 L388.5 78.3 L390.2 78.8 L391.8 79.2 L393.5 79.6 L395.2 80.0 L396.9 80.4 L398.5 80.8 L400.2 81.2 L401.9 81.6 L403.5 81.9 L405.2 82.3 L406.8 82.7 L408.5 83.0 L410.1 83.4 L411.8 83.7 L413.4 84.0 L415.0 84.4 L416.7 84.7 L418.3 85.0 L419.9 85.3 L421.5 85.6 L423.1 85.9 L424.7 86.2 L426.3 86.4 L427.9 86.7 L429.5 86.9 L431.0 87.2 L432.6 87.4 L434.2 87.7 L435.7 87.9 L437.3 88.1 L438.8 88.3 L440.4 88.5 L441.9 88.7 L443.5 88.9 L445.0 89.1 L446.5 89.2 L448.0 89.4 L449.6 89.6 L451.1 89.7 L452.6 89.9 L454.1 90.0 L455.6 90.1 L457.1 90.2 L458.6 90.4 L460.0 90.5 L461.5 90.6 L463.0 90.7 L464.5 90.7 L465.9 90.8 L467.4 90.9 L468.9 91.0 L470.3 91.0 L471.8 91.1 L473.2 91.1 L474.7 91.1 L476.1 91.2 L477.5 91.2 L478.9 91.2 L480.4 91.2 L481.8 91.2 L483.2 91.2 L484.6 91.2 L486.0 91.2 L487.4 91.2 L488.8 91.1 L490.2 91.1 L491.6 91.0 L493.0 91.0 L494.4 90.9 L495.8 90.9 L497.2 90.8 L498.6 90.7 L500.0 90.6 L501.3 90.5 L502.7 90.4 L504.1 90.3 L505.4 90.2 L506.8 90.0 L508.2 89.9 L509.5 89.8 L510.9 89.6 L512.2 89.5 L513.6 89.3 L514.9 89.1 L516.3 88.9 L517.6 88.8 L518.9 88.6 L520.3 88.4 L521.6 88.2 L522.9 88.0 L524.2 87.7 L525.5 87.5 L526.8 87.3 L528.1 87.1 L529.4 86.8 L530.7 86.6 L532.0 86.3 L533.2 86.1 L534.5 85.8 L535.7 85.6 L537.0 85.3 L538.2 85.0 L539.4 84.8 L540.6 84.5 L541.8 84.2 L543.0 83.9 L544.2 83.6 L545.4 83.4 L546.5 83.1 L547.7 82.8 L548.8 82.5 L549.9 82.2 L551.0 81.9 L552.1 81.6 L553.2 81.3 L554.3 81.0 L555.3 80.7 L556.4 80.4 L557.4 80.1 L558.4 79.8 L559.4 79.5 L560.4 79.2 L561.4 78.9 L562.3 78.6 L563.3 78.3 L564.2 78.0 L565.1 77.7 L566.1 77.3 L567.0 77.0 L567.8 76.7 L568.7 76.4 L569.6 76.1 L570.4 75.7 L571.3 75.4 L572.1 75.1 L572.9 74.8 L573.7 74.4 L574.5 74.1 L575.3 73.8 L576.1 73.4 L576.8 73.1 L577.6 72.7 L578.3 72.4 L579.0 72.0 L579.7 71.7 L580.4 71.3 L581.1 71.0 L581.8 70.6 L582.5 70.2 L583.1 69.8 L583.8 69.5 L584.4 69.1 L585.1 68.7 L585.7 68.3 L586.3 67.9 L586.9 67.5 L587.5 67.1 L588.0 66.7 L588.6 66.3 L589.1 65.9 L589.7 65.5 L590.2 65.1 L590.7 64.6 L591.2 64.2 L591.7 63.8 L592.2 63.3 L592.6 62.9 L593.1 62.4 L593.5 62.0 L594.0 61.5 L594.4 61.0 L594.8 60.6 L595.2 60.1 L595.5 59.6 L595.9 59.1 L596.3 58.6 L596.6 58.1 L596.9 57.6 L597.2 57.1 L597.5 56.6 L597.8 56.1 L598.1 55.5 L598.4 55.0 L598.6 54.5 L598.9 53.9 L599.1 53.4 L599.4 52.9 L599.6 52.3 L599.8 51.8 L600.0 51.2 L600.2 50.7 L600.4 50.1 L600.6 49.6 L600.7 49.0 L600.9 48.5 L601.1 47.9 L601.2 47.3 L601.4 46.8 L601.6 46.2 L601.7 45.6 L601.9 45.1 L602.0 44.5 L602.2 44.0 L602.3 43.4 L602.5 42.8 L602.6 42.3 L602.8 41.7 L602.9 41.1 L603.1 40.6 L603.2 40.0 L603.4 39.4 L603.5 38.9 L603.7 38.3 L603.8 37.8 L604.0 37.2 L604.1 36.7 L604.3 36.1 Z" />
+          <path d="M21.0 170.9 L21.9 169.8 L22.7 168.8 L23.6 167.7 L24.5 166.7 L25.4 165.6 L26.3 164.6 L27.2 163.6 L28.1 162.6 L29.1 161.6 L30.0 160.6 L30.9 159.6 L31.9 158.6 L32.8 157.6 L33.8 156.6 L34.8 155.6 L35.7 154.6 L35.4 154.3 L34.3 155.1 L33.2 155.9 L32.1 156.8 L31.0 157.7 L30.0 158.6 L28.9 159.5 L27.9 160.4 L26.9 161.3 L25.9 162.3 L24.8 163.2 L23.8 164.2 L22.9 165.1 L21.9 166.1 L20.9 167.1 L19.9 168.1 L19.0 169.1 Z" />
+          <path d="M21.3 169.6 L20.9 168.3 L20.5 167.0 L20.0 165.7 L19.6 164.4 L19.1 163.1 L18.6 161.8 L18.1 160.5 L17.6 159.2 L17.1 157.9 L16.6 156.6 L16.1 155.3 L15.5 154.1 L14.9 152.8 L14.3 151.6 L13.7 150.3 L13.1 149.1 L12.6 149.3 L13.0 150.6 L13.5 151.9 L13.9 153.2 L14.4 154.5 L14.8 155.8 L15.2 157.1 L15.6 158.4 L16.0 159.8 L16.3 161.1 L16.7 162.4 L17.1 163.7 L17.4 165.0 L17.8 166.4 L18.1 167.7 L18.4 169.0 L18.7 170.4 Z" />
+        </g>
+      </svg>
+    </section>
+
+    <!-- MENU — wersja tekstowa, bez kafelków i zdjęć -->
+    <section id="menu">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Karta</span>
+          <h2>Co u&nbsp;nas <span class="gold-script">zjesz?</span></h2>
+          <p>
+            Steki wyceniamy za 100 g — wagę dobierasz sam, a&nbsp;kelner
+            podpowie, ile zamówić.
+          </p>
+        </div>
+
+        <!-- Dawny „burger miesiąca" → wkładka sezonowa i miesięczna -->
+        <article class="chef">
+          <span class="label">Szef kuchni poleca</span>
+          <h3>Burger z serem Taleggio i sosem kurkowym</h3>
+          <p>
+            200 g wołowiny Hereford, ser Taleggio, sos kurkowo-śmietanowy,
+            remulada z&nbsp;czerwonej cebuli, rukola i&nbsp;ogórek w&nbsp;bułce
+            brioche.
+          </p>
+          <span class="price">51 zł</span>
+          <p class="note">
+            Propozycja na wrzesień. Wkładkę sezonową i&nbsp;miesięczną zmieniamy
+            raz w&nbsp;miesiącu.
+          </p>
+        </article>
+
+        <div class="menu-cols">
+          <div class="menu-cat">
+            <h3>Steki</h3>
+            <div class="menu-item">
+              <h4>Ribeye</h4>
+              <span class="price">54 zł / 100 g</span>
+              <p>
+                Antrykot z charakterystycznym okiem tłuszczu, mocno marmurkowy.
+              </p>
+            </div>
+            <div class="menu-item">
+              <h4>New York Strip</h4>
+              <span class="price">45 zł / 100 g</span>
+              <p>Rostbef bez kości — zwarty, o wyraźnym, mięsnym smaku.</p>
+            </div>
+            <div class="menu-item">
+              <h4>Polędwica</h4>
+              <span class="price">62 zł / 100 g</span>
+              <p>Najdelikatniejszy kawałek, najmniej tłuszczu.</p>
+            </div>
+            <div class="menu-item">
+              <h4>Tomahawk</h4>
+              <span class="price">49 zł / 100 g</span>
+              <p>Antrykot z długą kością, do dzielenia — zwykle 1,0–1,2 kg.</p>
+            </div>
+            <div class="menu-item">
+              <h4>Stek z polędwicy — zestaw</h4>
+              <span class="price">139 zł</span>
+              <p>Polędwica 200 g, frytki, mix sałat.</p>
+            </div>
+          </div>
+
+          <div class="menu-cat">
+            <h3>Burgery</h3>
+            <div class="menu-item">
+              <h4>Cheese &amp; Bacon</h4>
+              <span class="price">49 zł</span>
+              <p>
+                200 g wołowiny Hereford, chrupiący boczek, cheddar, sałata
+                lodowa, pikle, sos BBQ z czarnym bzem.
+              </p>
+            </div>
+            <div class="menu-item">
+              <h4>Cheeseburger</h4>
+              <span class="price">43 zł</span>
+              <p>
+                200 g wołowiny Hereford, cheddar, sos koktajlowy, pikle, bułka
+                brioche.
+              </p>
+            </div>
+            <div class="menu-item">
+              <h4>Burger z grillowanym boczniakiem</h4>
+              <span class="price">39 zł</span>
+              <p>
+                Wersja bezmięsna: boczniak, ser, karmelizowana cebula, sos
+                ziołowy.
+              </p>
+            </div>
+          </div>
+
+          <div class="menu-cat">
+            <h3>Przystawki</h3>
+            <div class="menu-item">
+              <h4>Tatar polski</h4>
+              <span class="price">52 zł</span>
+              <p>
+                150 g wołowiny Hereford, marynowane prawdziwki, ogórek kiszony,
+                szalotka, żółtko przepiórcze, pieczywo i masło.
+              </p>
+            </div>
+            <div class="menu-item">
+              <h4>Carpaccio wołowe</h4>
+              <span class="price">44 zł</span>
+              <p>Cienko krojona polędwica, parmezan, kapary, oliwa, rukola.</p>
+            </div>
+            <div class="menu-item">
+              <h4>Krążki cebulowe</h4>
+              <span class="price">24 zł</span>
+              <p>W chrupiącej panierce, z sosem czosnkowym.</p>
+            </div>
+          </div>
+
+          <div class="menu-cat">
+            <h3>Dodatki i sosy</h3>
+            <div class="menu-item">
+              <h4>Frytki z batatów</h4>
+              <span class="price">18 zł</span>
+            </div>
+            <div class="menu-item">
+              <h4>Grillowane warzywa</h4>
+              <span class="price">19 zł</span>
+            </div>
+            <div class="menu-item">
+              <h4>Masło ziołowe / sos pieprzowy / chimichurri</h4>
+              <span class="price">9 zł</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-cta-center">
+          <a href="menu.html" class="btn btn-solid">Zobacz pełne menu</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STOPIEŃ WYSMAŻENIA — interaktywny suwak, płynne przejścia między stopniami.
+     Zdjęcia: oficjalne fotografie steków przekrojonych na pół (img/wysmazenie/). -->
+    <section class="done" id="wysmazenie">
+      <div class="wrap done-grid">
+        <div class="done-stage">
+          <img
+            src="img/blue.jpg"
+            alt="Stek blue rare w przekroju"
+            data-level="0"
+            class="is-active"
+          />
+          <img
+            src="img/rare.jpg"
+            alt="Stek rare w przekroju"
+            data-level="1"
+          />
+          <img
+            src="img/midrare.jpg"
+            alt="Stek medium rare w przekroju"
+            data-level="2"
+          />
+          <img
+            src="img/medium.jpg"
+            alt="Stek medium w przekroju"
+            data-level="3"
+          />
+          <img
+            src="img/midwell.jpg"
+            alt="Stek medium well w przekroju"
+            data-level="4"
+          />
+          <img
+            src="img/well.jpg"
+            alt="Stek well done w przekroju"
+            data-level="5"
+          />
+        </div>
+        <div>
+          <span class="eyebrow">Stopień wysmażenia</span>
+          <h2 class="done-name" id="done-name">Blue rare</h2>
+          <p class="done-temp" id="done-temp">48–50 °C w środku</p>
+          <p class="done-desc" id="done-desc">
+            Krótko obsmażony z zewnątrz, w środku praktycznie surowy i chłodny.
+            Dla tych, którzy chcą poczuć samo mięso.
+          </p>
+
+          <label for="done-range" class="eyebrow" style="margin-bottom: 14px"
+            >Przesuń suwak</label
+          >
+          <input
+            class="done-slider"
+            id="done-range"
+            type="range"
+            min="0"
+            max="5"
+            step="1"
+            value="0"
+            aria-label="Wybierz stopień wysmażenia steku"
+          />
+          <div class="done-scale" id="done-scale">
+            <button type="button" data-level="0" aria-current="true">
+              Blue
+            </button>
+            <button type="button" data-level="1">Rare</button>
+            <button type="button" data-level="2">Med. rare</button>
+            <button type="button" data-level="3">Medium</button>
+            <button type="button" data-level="4">Med. well</button>
+            <button type="button" data-level="5">Well done</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERIA -->
+    <section class="gallery" id="galeria">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Galeria</span>
+          <h2>
+            Zajrzyj do nas, zanim
+            <span class="gold-script">przyjdziesz</span>
+          </h2>
+        </div>
+        <ul class="collage">
+          <li class="g-big">
+            <button type="button" class="collage-item" data-index="0">
+              <img src="img/galeria/galeria-01.jpg" alt="Sala restauracyjna pod ceglanymi łukami" loading="lazy" />
+            </button>
+          </li>
+          <li class="g-tall">
+            <button type="button" class="collage-item" data-index="1">
+              <img src="img/galeria/galeria-02.jpg" alt="Stek na grillu" loading="lazy" />
+            </button>
+          </li>
+          <li>
+            <button type="button" class="collage-item" data-index="2">
+              <img src="img/galeria/galeria-03.jpg" alt="Burger z wołowiny Hereford" loading="lazy" />
+            </button>
+          </li>
+          <li>
+            <button type="button" class="collage-item" data-index="3">
+              <img src="img/galeria/galeria-04.jpg" alt="Kieliszek czerwonego wina" loading="lazy" />
+            </button>
+          </li>
+          <li class="g-wide">
+            <button type="button" class="collage-item" data-index="4">
+              <img src="img/galeria/galeria-05.jpg" alt="Taras z widokiem na fosę" loading="lazy" />
+            </button>
+          </li>
+          <li>
+            <button type="button" class="collage-item" data-index="5">
+              <img src="img/galeria/galeria-06.jpg" alt="Deska z wybranymi kawałkami mięsa" loading="lazy" />
+            </button>
+          </li>
+          <li class="g-tall">
+            <button type="button" class="collage-item" data-index="6">
+              <img src="img/galeria/galeria-07.jpg" alt="Bydło Hereford na pastwisku na Warmii" loading="lazy" />
+            </button>
+          </li>
+          <li>
+            <button type="button" class="collage-item" data-index="7">
+              <img src="img/galeria/galeria-08.jpg" alt="Kuchnia podczas serwisu" loading="lazy" />
+            </button>
+          </li>
+          <li class="g-wide">
+            <button type="button" class="collage-item" data-index="8">
+              <img src="img/galeria/galeria-09.jpg" alt="Stół przygotowany na przyjęcie" loading="lazy" />
+            </button>
+          </li>
+          <li class="g-wide">
+            <button type="button" class="collage-item" data-index="9">
+              <img src="img/galeria/galeria-10.jpg" alt="Mury fortu wieczorem" loading="lazy" />
+            </button>
+          </li>
+          <li>
+            <button type="button" class="collage-item" data-index="10">
+              <img src="img/galeria/galeria-11.jpg" alt="Lada sklepu BEEFshop" loading="lazy" />
+            </button>
+          </li>
+          <li>
+            <button type="button" class="collage-item" data-index="11">
+              <img src="img/galeria/galeria-12.jpg" alt="Deser na zakończenie kolacji" loading="lazy" />
+            </button>
+          </li>
+        </ul>
+        <div class="gallery-cta">
+          <a href="galeria.html" class="btn">Więcej zdjęć</a>
+        </div>
+      </div>
+
+      <dialog class="lightbox" id="lightbox" aria-label="Podgląd zdjęcia">
+        <figure class="lightbox-figure">
+          <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+          <figcaption class="lightbox-caption">
+            <span id="lightbox-count"></span><em id="lightbox-text" style="font-style: normal"></em>
+          </figcaption>
+        </figure>
+        <button type="button" class="lightbox-btn lightbox-close" id="lightbox-close" aria-label="Zamknij">&times;</button>
+        <button type="button" class="lightbox-btn lightbox-prev" id="lightbox-prev" aria-label="Poprzednie zdjęcie">&#8249;</button>
+        <button type="button" class="lightbox-btn lightbox-next" id="lightbox-next" aria-label="Następne zdjęcie">&#8250;</button>
+      </dialog>
+    </section>
+
+    <!-- O NAS -->
+    <section class="about" id="o-nas">
+      <div class="wrap about-grid">
+        <div class="about-inner">
+          <span class="eyebrow">O nas</span>
+          <h2>
+            ... kończy na Twoim <span class="gold-script">talerzu</span>
+          </h2>
+          <p>
+            Jesteśmy miejscem casual premium: dobre mięso, dobre wino
+            i&nbsp;zero sztywnej atmosfery. Można wpaść na burgera w&nbsp;piątek
+            po pracy i&nbsp;można zarezerwować stół na kolację, która ma zapaść
+            w&nbsp;pamięć.
+          </p>
+          <p>
+            Trudno dziś o&nbsp;steka ze sprawdzonego źródła — w&nbsp;większości
+            miejsc nikt nie potrafi powiedzieć, skąd pochodzi mięso. U&nbsp;nas
+            odpowiedź jest prosta: z&nbsp;naszej hodowli na Warmii. Do dań
+            dobieramy wina, a&nbsp;ulubiony kawałek mięsa możesz zabrać do domu
+            albo zamówić przez
+            <a
+              href="https://BEEFshop.pl"
+              style="color: var(--gold); text-decoration: underline"
+              >BEEFshop.pl</a
+            >.
+          </p>
+          <a href="o-nas.html" class="btn">Cała historia</a>
+        </div>
+        <img
+          class="about-image"
+          src="img/stek.jpg"
+          alt="Wnętrze restauracji BEEFshop &amp; GRILL"
+        />
+      </div>
+      <svg
+        class="flow-arrow flow-arrow--right"
+        viewBox="0 0 620 190"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <mask id="about-arrow-draw" maskUnits="userSpaceOnUse" x="-20" y="-20" width="660" height="230">
+            <path class="draw-line" pathLength="1" d="M604.0 36.0 C600.7 44.7 601.3 54.8 594.0 62.0 C586.7 69.2 575.7 74.3 560.0 79.0 C544.3 83.7 521.7 88.8 500.0 90.0 C478.3 91.2 455.0 90.0 430.0 86.0 C405.0 82.0 376.7 74.7 350.0 66.0 C323.3 57.3 295.7 43.5 270.0 34.0 C244.3 24.5 218.7 13.0 196.0 9.0 C173.3 5.0 152.3 5.5 134.0 10.0 C115.7 14.5 99.7 24.3 86.0 36.0 C72.3 47.7 61.2 65.0 52.0 80.0 C42.8 95.0 36.3 111.0 31.0 126.0 C25.7 141.0 23.7 155.3 20.0 170.0" />
+            <path class="draw-head" pathLength="1" d="M20.0 170.0 Q27.2 161.7 35.6 154.5" />
+            <path class="draw-head" pathLength="1" d="M20.0 170.0 Q17.2 159.3 12.9 149.2" />
+          </mask>
+        </defs>
+        <g mask="url(#about-arrow-draw)">
+          <path d="M603.7 35.9 L603.5 36.4 L603.3 37.0 L603.1 37.6 L603.0 38.1 L602.8 38.7 L602.7 39.3 L602.5 39.8 L602.4 40.4 L602.2 41.0 L602.1 41.5 L601.9 42.1 L601.8 42.6 L601.6 43.2 L601.5 43.8 L601.3 44.3 L601.2 44.9 L601.0 45.5 L600.9 46.0 L600.7 46.6 L600.6 47.1 L600.4 47.7 L600.2 48.2 L600.0 48.8 L599.9 49.3 L599.7 49.9 L599.5 50.4 L599.3 51.0 L599.1 51.5 L598.9 52.0 L598.7 52.6 L598.4 53.1 L598.2 53.6 L598.0 54.2 L597.7 54.7 L597.5 55.2 L597.2 55.7 L596.9 56.2 L596.6 56.7 L596.3 57.2 L596.0 57.7 L595.6 58.2 L595.3 58.6 L594.9 59.1 L594.6 59.6 L594.2 60.1 L593.8 60.5 L593.4 61.0 L593.0 61.4 L592.5 61.9 L592.1 62.3 L591.6 62.7 L591.2 63.2 L590.7 63.6 L590.2 64.0 L589.7 64.4 L589.2 64.8 L588.6 65.2 L588.1 65.6 L587.5 66.0 L587.0 66.4 L586.4 66.8 L585.8 67.2 L585.2 67.6 L584.6 68.0 L584.0 68.3 L583.3 68.7 L582.7 69.1 L582.0 69.4 L581.4 69.8 L580.7 70.1 L580.0 70.5 L579.3 70.8 L578.6 71.2 L577.9 71.5 L577.2 71.9 L576.4 72.2 L575.7 72.5 L574.9 72.9 L574.1 73.2 L573.3 73.5 L572.5 73.8 L571.7 74.2 L570.9 74.5 L570.1 74.8 L569.2 75.1 L568.4 75.4 L567.5 75.7 L566.6 76.0 L565.7 76.3 L564.8 76.6 L563.9 76.9 L562.9 77.2 L562.0 77.5 L561.0 77.8 L560.1 78.1 L559.1 78.4 L558.1 78.7 L557.1 79.0 L556.0 79.3 L555.0 79.5 L553.9 79.8 L552.9 80.1 L551.8 80.4 L550.7 80.7 L549.6 81.0 L548.5 81.2 L547.3 81.5 L546.2 81.8 L545.1 82.0 L543.9 82.3 L542.7 82.6 L541.5 82.8 L540.3 83.1 L539.1 83.3 L537.9 83.6 L536.7 83.8 L535.4 84.1 L534.2 84.3 L532.9 84.6 L531.7 84.8 L530.4 85.0 L529.1 85.2 L527.8 85.5 L526.6 85.7 L525.3 85.9 L524.0 86.1 L522.6 86.3 L521.3 86.5 L520.0 86.6 L518.7 86.8 L517.4 87.0 L516.0 87.1 L514.7 87.3 L513.4 87.5 L512.0 87.6 L510.7 87.7 L509.3 87.9 L508.0 88.0 L506.6 88.1 L505.3 88.2 L503.9 88.3 L502.6 88.4 L501.2 88.5 L499.8 88.6 L498.5 88.6 L497.1 88.7 L495.7 88.7 L494.3 88.8 L493.0 88.8 L491.6 88.9 L490.2 88.9 L488.8 88.9 L487.4 88.9 L486.0 88.9 L484.6 88.9 L483.2 88.9 L481.8 88.9 L480.4 88.9 L479.0 88.9 L477.6 88.8 L476.1 88.8 L474.7 88.7 L473.3 88.7 L471.9 88.6 L470.4 88.6 L469.0 88.5 L467.5 88.4 L466.1 88.3 L464.6 88.2 L463.2 88.1 L461.7 88.0 L460.2 87.9 L458.8 87.8 L457.3 87.7 L455.8 87.5 L454.3 87.4 L452.8 87.2 L451.3 87.1 L449.8 86.9 L448.3 86.8 L446.8 86.6 L445.3 86.4 L443.8 86.2 L442.3 86.0 L440.7 85.8 L439.2 85.6 L437.7 85.4 L436.1 85.2 L434.6 84.9 L433.0 84.7 L431.5 84.5 L429.9 84.2 L428.3 84.0 L426.8 83.7 L425.2 83.4 L423.6 83.1 L422.0 82.8 L420.4 82.6 L418.8 82.2 L417.2 81.9 L415.6 81.6 L414.0 81.3 L412.3 81.0 L410.7 80.6 L409.1 80.3 L407.4 79.9 L405.8 79.6 L404.1 79.2 L402.5 78.8 L400.8 78.5 L399.2 78.1 L397.5 77.7 L395.9 77.3 L394.2 76.9 L392.5 76.5 L390.8 76.1 L389.2 75.6 L387.5 75.2 L385.8 74.8 L384.1 74.3 L382.5 73.9 L380.8 73.4 L379.1 73.0 L377.4 72.5 L375.7 72.0 L374.0 71.6 L372.4 71.1 L370.7 70.6 L369.0 70.1 L367.3 69.6 L365.6 69.1 L363.9 68.6 L362.2 68.1 L360.6 67.5 L358.9 67.0 L357.2 66.5 L355.5 65.9 L353.8 65.4 L352.2 64.8 L350.5 64.3 L348.8 63.7 L347.1 63.1 L345.4 62.5 L343.8 62.0 L342.1 61.4 L340.4 60.8 L338.7 60.1 L337.1 59.5 L335.4 58.9 L333.7 58.3 L332.0 57.6 L330.3 57.0 L328.7 56.4 L327.0 55.7 L325.3 55.0 L323.6 54.4 L322.0 53.7 L320.3 53.0 L318.6 52.4 L316.9 51.7 L315.3 51.0 L313.6 50.3 L311.9 49.6 L310.2 49.0 L308.6 48.3 L306.9 47.6 L305.2 46.9 L303.5 46.2 L301.9 45.5 L300.2 44.8 L298.6 44.1 L296.9 43.5 L295.2 42.8 L293.6 42.1 L291.9 41.4 L290.3 40.7 L288.6 40.1 L287.0 39.4 L285.3 38.7 L283.7 38.1 L282.1 37.4 L280.4 36.7 L278.8 36.1 L277.2 35.4 L275.5 34.8 L273.9 34.1 L272.3 33.5 L270.7 32.9 L269.0 32.2 L267.4 31.6 L265.8 31.0 L264.2 30.3 L262.6 29.7 L261.0 29.1 L259.4 28.5 L257.8 27.9 L256.2 27.3 L254.6 26.6 L253.0 26.0 L251.4 25.4 L249.8 24.8 L248.2 24.2 L246.7 23.6 L245.1 23.1 L243.5 22.5 L241.9 21.9 L240.4 21.3 L238.8 20.7 L237.2 20.2 L235.7 19.6 L234.1 19.1 L232.6 18.5 L231.0 18.0 L229.5 17.4 L227.9 16.9 L226.4 16.4 L224.8 15.9 L223.3 15.4 L221.8 14.9 L220.3 14.4 L218.7 14.0 L217.2 13.5 L215.7 13.1 L214.2 12.6 L212.7 12.2 L211.2 11.8 L209.7 11.4 L208.2 11.0 L206.8 10.7 L205.3 10.3 L203.8 10.0 L202.4 9.6 L200.9 9.3 L199.5 9.0 L198.0 8.7 L196.6 8.4 L195.1 8.2 L193.7 7.9 L192.3 7.7 L190.9 7.5 L189.5 7.3 L188.0 7.1 L186.6 6.9 L185.3 6.7 L183.9 6.6 L182.5 6.4 L181.1 6.3 L179.7 6.2 L178.4 6.1 L177.0 6.0 L175.6 5.9 L174.3 5.8 L172.9 5.8 L171.6 5.7 L170.3 5.7 L168.9 5.6 L167.6 5.6 L166.3 5.6 L165.0 5.6 L163.7 5.7 L162.4 5.7 L161.1 5.7 L159.8 5.8 L158.5 5.8 L157.2 5.9 L155.9 6.0 L154.7 6.1 L153.4 6.2 L152.2 6.3 L150.9 6.5 L149.7 6.6 L148.4 6.8 L147.2 6.9 L146.0 7.1 L144.7 7.3 L143.5 7.5 L142.3 7.7 L141.1 7.9 L139.9 8.2 L138.7 8.4 L137.6 8.7 L136.4 8.9 L135.2 9.2 L134.1 9.5 L132.9 9.8 L131.8 10.1 L130.6 10.4 L129.5 10.8 L128.3 11.1 L127.2 11.5 L126.1 11.8 L125.0 12.2 L123.9 12.6 L122.8 13.0 L121.7 13.4 L120.6 13.9 L119.5 14.3 L118.4 14.8 L117.4 15.2 L116.3 15.7 L115.3 16.2 L114.2 16.7 L113.2 17.2 L112.1 17.7 L111.1 18.2 L110.1 18.7 L109.1 19.3 L108.0 19.8 L107.0 20.4 L106.0 21.0 L105.0 21.5 L104.1 22.1 L103.1 22.7 L102.1 23.3 L101.1 24.0 L100.2 24.6 L99.2 25.2 L98.3 25.9 L97.3 26.5 L96.4 27.2 L95.5 27.8 L94.5 28.5 L93.6 29.2 L92.7 29.9 L91.8 30.6 L90.9 31.3 L90.0 32.0 L89.1 32.7 L88.2 33.4 L87.4 34.2 L86.5 34.9 L85.6 35.7 L84.8 36.5 L83.9 37.2 L83.1 38.0 L82.2 38.8 L81.4 39.6 L80.6 40.4 L79.8 41.3 L79.0 42.1 L78.2 42.9 L77.4 43.8 L76.6 44.6 L75.8 45.5 L75.0 46.4 L74.2 47.2 L73.5 48.1 L72.7 49.0 L71.9 49.9 L71.2 50.8 L70.4 51.7 L69.7 52.6 L69.0 53.6 L68.3 54.5 L67.5 55.4 L66.8 56.4 L66.1 57.3 L65.4 58.3 L64.7 59.2 L64.0 60.2 L63.3 61.1 L62.7 62.1 L62.0 63.0 L61.3 64.0 L60.7 65.0 L60.0 65.9 L59.4 66.9 L58.7 67.9 L58.1 68.8 L57.5 69.8 L56.8 70.8 L56.2 71.7 L55.6 72.7 L55.0 73.7 L54.4 74.6 L53.8 75.6 L53.2 76.6 L52.6 77.5 L52.1 78.5 L51.5 79.5 L50.9 80.4 L50.4 81.4 L49.8 82.3 L49.3 83.3 L48.7 84.3 L48.2 85.2 L47.6 86.2 L47.1 87.2 L46.6 88.1 L46.1 89.1 L45.6 90.1 L45.1 91.0 L44.6 92.0 L44.1 92.9 L43.6 93.9 L43.1 94.9 L42.6 95.8 L42.2 96.8 L41.7 97.8 L41.3 98.7 L40.8 99.7 L40.4 100.7 L39.9 101.6 L39.5 102.6 L39.0 103.6 L38.6 104.5 L38.2 105.5 L37.8 106.5 L37.4 107.4 L37.0 108.4 L36.6 109.4 L36.2 110.3 L35.8 111.3 L35.4 112.3 L35.0 113.2 L34.6 114.2 L34.2 115.1 L33.9 116.1 L33.5 117.1 L33.1 118.0 L32.8 119.0 L32.4 119.9 L32.1 120.9 L31.7 121.8 L31.4 122.8 L31.1 123.7 L30.7 124.7 L30.4 125.6 L30.1 126.5 L29.8 127.5 L29.5 128.4 L29.2 129.4 L28.9 130.3 L28.6 131.2 L28.3 132.2 L28.0 133.1 L27.7 134.0 L27.5 135.0 L27.2 135.9 L26.9 136.8 L26.7 137.8 L26.4 138.7 L26.2 139.6 L25.9 140.5 L25.7 141.5 L25.5 142.4 L25.2 143.3 L25.0 144.2 L24.8 145.1 L24.5 146.1 L24.3 147.0 L24.1 147.9 L23.9 148.8 L23.7 149.7 L23.5 150.6 L23.3 151.6 L23.0 152.5 L22.8 153.4 L22.6 154.3 L22.4 155.2 L22.2 156.1 L22.0 157.0 L21.8 157.9 L21.6 158.9 L21.4 159.8 L21.2 160.7 L21.0 161.6 L20.8 162.5 L20.6 163.4 L20.4 164.3 L20.2 165.2 L20.0 166.1 L19.8 167.1 L19.5 168.0 L19.3 168.9 L19.1 169.8 L20.9 170.2 L21.1 169.3 L21.3 168.4 L21.5 167.5 L21.7 166.5 L21.9 165.6 L22.2 164.7 L22.4 163.8 L22.6 162.9 L22.8 162.0 L23.0 161.1 L23.2 160.2 L23.4 159.3 L23.6 158.3 L23.8 157.4 L24.0 156.5 L24.2 155.6 L24.4 154.7 L24.6 153.8 L24.8 152.9 L25.0 152.0 L25.2 151.0 L25.5 150.1 L25.7 149.2 L25.9 148.3 L26.1 147.4 L26.3 146.5 L26.5 145.6 L26.8 144.7 L27.0 143.7 L27.2 142.8 L27.5 141.9 L27.7 141.0 L28.0 140.1 L28.2 139.2 L28.5 138.2 L28.7 137.3 L29.0 136.4 L29.2 135.5 L29.5 134.6 L29.8 133.6 L30.1 132.7 L30.4 131.8 L30.6 130.9 L30.9 129.9 L31.2 129.0 L31.5 128.1 L31.9 127.1 L32.2 126.2 L32.5 125.3 L32.8 124.3 L33.1 123.4 L33.5 122.4 L33.8 121.5 L34.2 120.6 L34.5 119.6 L34.9 118.7 L35.2 117.7 L35.6 116.8 L36.0 115.8 L36.3 114.9 L36.7 113.9 L37.1 113.0 L37.5 112.0 L37.9 111.1 L38.3 110.1 L38.7 109.1 L39.1 108.2 L39.5 107.2 L39.9 106.3 L40.3 105.3 L40.8 104.3 L41.2 103.4 L41.6 102.4 L42.1 101.5 L42.5 100.5 L43.0 99.6 L43.4 98.6 L43.9 97.6 L44.4 96.7 L44.8 95.7 L45.3 94.8 L45.8 93.8 L46.3 92.9 L46.8 91.9 L47.3 90.9 L47.8 90.0 L48.3 89.0 L48.8 88.1 L49.3 87.1 L49.9 86.2 L50.4 85.2 L50.9 84.3 L51.5 83.3 L52.0 82.4 L52.6 81.4 L53.2 80.4 L53.7 79.5 L54.3 78.5 L54.9 77.6 L55.5 76.6 L56.1 75.7 L56.7 74.7 L57.3 73.8 L57.9 72.8 L58.5 71.8 L59.1 70.9 L59.8 69.9 L60.4 69.0 L61.0 68.0 L61.7 67.1 L62.3 66.1 L63.0 65.1 L63.7 64.2 L64.3 63.2 L65.0 62.3 L65.7 61.3 L66.4 60.4 L67.0 59.5 L67.7 58.5 L68.4 57.6 L69.2 56.7 L69.9 55.8 L70.6 54.8 L71.3 53.9 L72.0 53.0 L72.8 52.1 L73.5 51.2 L74.3 50.4 L75.0 49.5 L75.8 48.6 L76.6 47.7 L77.3 46.9 L78.1 46.0 L78.9 45.2 L79.7 44.4 L80.5 43.6 L81.3 42.7 L82.1 41.9 L82.9 41.1 L83.7 40.4 L84.5 39.6 L85.4 38.8 L86.2 38.1 L87.1 37.3 L87.9 36.6 L88.8 35.8 L89.6 35.1 L90.5 34.4 L91.4 33.7 L92.2 33.0 L93.1 32.3 L94.0 31.6 L94.9 30.9 L95.8 30.3 L96.7 29.6 L97.7 29.0 L98.6 28.3 L99.5 27.7 L100.4 27.1 L101.4 26.4 L102.3 25.8 L103.3 25.2 L104.2 24.6 L105.2 24.1 L106.2 23.5 L107.2 22.9 L108.1 22.4 L109.1 21.8 L110.1 21.3 L111.1 20.8 L112.1 20.2 L113.1 19.7 L114.2 19.2 L115.2 18.7 L116.2 18.3 L117.2 17.8 L118.3 17.3 L119.3 16.9 L120.4 16.5 L121.5 16.0 L122.5 15.6 L123.6 15.2 L124.7 14.8 L125.8 14.4 L126.8 14.1 L127.9 13.7 L129.0 13.4 L130.1 13.0 L131.3 12.7 L132.4 12.4 L133.5 12.1 L134.6 11.8 L135.8 11.5 L136.9 11.3 L138.1 11.0 L139.2 10.8 L140.4 10.5 L141.6 10.3 L142.8 10.1 L143.9 9.9 L145.1 9.7 L146.3 9.5 L147.5 9.4 L148.7 9.2 L149.9 9.1 L151.2 8.9 L152.4 8.8 L153.6 8.7 L154.9 8.6 L156.1 8.5 L157.4 8.4 L158.6 8.4 L159.9 8.3 L161.2 8.2 L162.4 8.2 L163.7 8.2 L165.0 8.2 L166.3 8.2 L167.6 8.2 L168.9 8.2 L170.2 8.2 L171.5 8.3 L172.8 8.3 L174.1 8.4 L175.5 8.5 L176.8 8.6 L178.2 8.7 L179.5 8.8 L180.8 8.9 L182.2 9.0 L183.6 9.2 L184.9 9.4 L186.3 9.5 L187.7 9.7 L189.1 9.9 L190.5 10.1 L191.9 10.4 L193.2 10.6 L194.7 10.8 L196.1 11.1 L197.5 11.4 L198.9 11.7 L200.3 12.0 L201.8 12.3 L203.2 12.6 L204.7 13.0 L206.1 13.3 L207.6 13.7 L209.0 14.1 L210.5 14.5 L212.0 14.9 L213.4 15.3 L214.9 15.7 L216.4 16.2 L217.9 16.6 L219.4 17.1 L220.9 17.6 L222.4 18.1 L224.0 18.5 L225.5 19.1 L227.0 19.6 L228.5 20.1 L230.1 20.6 L231.6 21.2 L233.2 21.7 L234.7 22.2 L236.3 22.8 L237.8 23.4 L239.4 23.9 L241.0 24.5 L242.5 25.1 L244.1 25.7 L245.7 26.3 L247.3 26.9 L248.8 27.5 L250.4 28.1 L252.0 28.7 L253.6 29.3 L255.2 29.9 L256.8 30.5 L258.4 31.1 L260.0 31.7 L261.6 32.3 L263.2 33.0 L264.8 33.6 L266.4 34.2 L268.0 34.8 L269.6 35.5 L271.2 36.1 L272.9 36.7 L274.5 37.4 L276.1 38.0 L277.7 38.7 L279.4 39.3 L281.0 40.0 L282.6 40.7 L284.3 41.3 L285.9 42.0 L287.6 42.7 L289.2 43.3 L290.9 44.0 L292.5 44.7 L294.2 45.4 L295.8 46.0 L297.5 46.7 L299.1 47.4 L300.8 48.1 L302.5 48.8 L304.1 49.5 L305.8 50.2 L307.5 50.9 L309.2 51.5 L310.8 52.2 L312.5 52.9 L314.2 53.6 L315.9 54.3 L317.6 55.0 L319.2 55.6 L320.9 56.3 L322.6 57.0 L324.3 57.7 L326.0 58.3 L327.7 59.0 L329.3 59.6 L331.0 60.3 L332.7 60.9 L334.4 61.5 L336.1 62.2 L337.8 62.8 L339.5 63.4 L341.1 64.0 L342.8 64.6 L344.5 65.2 L346.2 65.8 L347.9 66.3 L349.6 66.9 L351.3 67.5 L353.0 68.0 L354.7 68.6 L356.3 69.1 L358.0 69.7 L359.7 70.2 L361.4 70.7 L363.1 71.3 L364.8 71.8 L366.5 72.3 L368.2 72.8 L369.9 73.3 L371.6 73.8 L373.3 74.3 L375.0 74.7 L376.7 75.2 L378.3 75.7 L380.0 76.1 L381.7 76.6 L383.4 77.0 L385.1 77.5 L386.8 77.9 L388.5 78.3 L390.2 78.8 L391.8 79.2 L393.5 79.6 L395.2 80.0 L396.9 80.4 L398.5 80.8 L400.2 81.2 L401.9 81.6 L403.5 81.9 L405.2 82.3 L406.8 82.7 L408.5 83.0 L410.1 83.4 L411.8 83.7 L413.4 84.0 L415.0 84.4 L416.7 84.7 L418.3 85.0 L419.9 85.3 L421.5 85.6 L423.1 85.9 L424.7 86.2 L426.3 86.4 L427.9 86.7 L429.5 86.9 L431.0 87.2 L432.6 87.4 L434.2 87.7 L435.7 87.9 L437.3 88.1 L438.8 88.3 L440.4 88.5 L441.9 88.7 L443.5 88.9 L445.0 89.1 L446.5 89.2 L448.0 89.4 L449.6 89.6 L451.1 89.7 L452.6 89.9 L454.1 90.0 L455.6 90.1 L457.1 90.2 L458.6 90.4 L460.0 90.5 L461.5 90.6 L463.0 90.7 L464.5 90.7 L465.9 90.8 L467.4 90.9 L468.9 91.0 L470.3 91.0 L471.8 91.1 L473.2 91.1 L474.7 91.1 L476.1 91.2 L477.5 91.2 L478.9 91.2 L480.4 91.2 L481.8 91.2 L483.2 91.2 L484.6 91.2 L486.0 91.2 L487.4 91.2 L488.8 91.1 L490.2 91.1 L491.6 91.0 L493.0 91.0 L494.4 90.9 L495.8 90.9 L497.2 90.8 L498.6 90.7 L500.0 90.6 L501.3 90.5 L502.7 90.4 L504.1 90.3 L505.4 90.2 L506.8 90.0 L508.2 89.9 L509.5 89.8 L510.9 89.6 L512.2 89.5 L513.6 89.3 L514.9 89.1 L516.3 88.9 L517.6 88.8 L518.9 88.6 L520.3 88.4 L521.6 88.2 L522.9 88.0 L524.2 87.7 L525.5 87.5 L526.8 87.3 L528.1 87.1 L529.4 86.8 L530.7 86.6 L532.0 86.3 L533.2 86.1 L534.5 85.8 L535.7 85.6 L537.0 85.3 L538.2 85.0 L539.4 84.8 L540.6 84.5 L541.8 84.2 L543.0 83.9 L544.2 83.6 L545.4 83.4 L546.5 83.1 L547.7 82.8 L548.8 82.5 L549.9 82.2 L551.0 81.9 L552.1 81.6 L553.2 81.3 L554.3 81.0 L555.3 80.7 L556.4 80.4 L557.4 80.1 L558.4 79.8 L559.4 79.5 L560.4 79.2 L561.4 78.9 L562.3 78.6 L563.3 78.3 L564.2 78.0 L565.1 77.7 L566.1 77.3 L567.0 77.0 L567.8 76.7 L568.7 76.4 L569.6 76.1 L570.4 75.7 L571.3 75.4 L572.1 75.1 L572.9 74.8 L573.7 74.4 L574.5 74.1 L575.3 73.8 L576.1 73.4 L576.8 73.1 L577.6 72.7 L578.3 72.4 L579.0 72.0 L579.7 71.7 L580.4 71.3 L581.1 71.0 L581.8 70.6 L582.5 70.2 L583.1 69.8 L583.8 69.5 L584.4 69.1 L585.1 68.7 L585.7 68.3 L586.3 67.9 L586.9 67.5 L587.5 67.1 L588.0 66.7 L588.6 66.3 L589.1 65.9 L589.7 65.5 L590.2 65.1 L590.7 64.6 L591.2 64.2 L591.7 63.8 L592.2 63.3 L592.6 62.9 L593.1 62.4 L593.5 62.0 L594.0 61.5 L594.4 61.0 L594.8 60.6 L595.2 60.1 L595.5 59.6 L595.9 59.1 L596.3 58.6 L596.6 58.1 L596.9 57.6 L597.2 57.1 L597.5 56.6 L597.8 56.1 L598.1 55.5 L598.4 55.0 L598.6 54.5 L598.9 53.9 L599.1 53.4 L599.4 52.9 L599.6 52.3 L599.8 51.8 L600.0 51.2 L600.2 50.7 L600.4 50.1 L600.6 49.6 L600.7 49.0 L600.9 48.5 L601.1 47.9 L601.2 47.3 L601.4 46.8 L601.6 46.2 L601.7 45.6 L601.9 45.1 L602.0 44.5 L602.2 44.0 L602.3 43.4 L602.5 42.8 L602.6 42.3 L602.8 41.7 L602.9 41.1 L603.1 40.6 L603.2 40.0 L603.4 39.4 L603.5 38.9 L603.7 38.3 L603.8 37.8 L604.0 37.2 L604.1 36.7 L604.3 36.1 Z" />
+          <path d="M21.0 170.9 L21.9 169.8 L22.7 168.8 L23.6 167.7 L24.5 166.7 L25.4 165.6 L26.3 164.6 L27.2 163.6 L28.1 162.6 L29.1 161.6 L30.0 160.6 L30.9 159.6 L31.9 158.6 L32.8 157.6 L33.8 156.6 L34.8 155.6 L35.7 154.6 L35.4 154.3 L34.3 155.1 L33.2 155.9 L32.1 156.8 L31.0 157.7 L30.0 158.6 L28.9 159.5 L27.9 160.4 L26.9 161.3 L25.9 162.3 L24.8 163.2 L23.8 164.2 L22.9 165.1 L21.9 166.1 L20.9 167.1 L19.9 168.1 L19.0 169.1 Z" />
+          <path d="M21.3 169.6 L20.9 168.3 L20.5 167.0 L20.0 165.7 L19.6 164.4 L19.1 163.1 L18.6 161.8 L18.1 160.5 L17.6 159.2 L17.1 157.9 L16.6 156.6 L16.1 155.3 L15.5 154.1 L14.9 152.8 L14.3 151.6 L13.7 150.3 L13.1 149.1 L12.6 149.3 L13.0 150.6 L13.5 151.9 L13.9 153.2 L14.4 154.5 L14.8 155.8 L15.2 157.1 L15.6 158.4 L16.0 159.8 L16.3 161.1 L16.7 162.4 L17.1 163.7 L17.4 165.0 L17.8 166.4 L18.1 167.7 L18.4 169.0 L18.7 170.4 Z" />
+        </g>
+      </svg>
+    </section>
+
+    <!-- HISTORIA FORTU -->
+    <section class="fort-history" id="historia-fortu">
+      <div class="wrap fort-history-grid">
+        <div class="fort-gallery">
+          <img
+            class="fort-gallery-main"
+            id="fort-gallery-main"
+            src="img/fort-historia-1.jpg"
+            alt="Ceglane łuki Fortu 8 Służew"
+          />
+          <ul class="fort-thumbs" aria-label="Galeria zdjęć fortu">
+            <li>
+              <button
+                type="button"
+                class="fort-thumb"
+                aria-pressed="true"
+                aria-label="Pokaż zdjęcie: Ceglane łuki Fortu 8 Służew"
+              >
+                <img src="img/fort-historia-1.jpg" alt="Ceglane łuki Fortu 8 Służew" loading="lazy" />
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="fort-thumb"
+                aria-pressed="false"
+                aria-label="Pokaż zdjęcie: Wały ziemne i fosa fortu"
+              >
+                <img src="img/fort-historia-2.jpg" alt="Wały ziemne i fosa fortu" loading="lazy" />
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="fort-thumb"
+                aria-pressed="false"
+                aria-label="Pokaż zdjęcie: Wnętrze kazamat fortu"
+              >
+                <img src="img/fort-historia-3.jpg" alt="Wnętrze kazamat fortu" loading="lazy" />
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="fort-thumb"
+                aria-pressed="false"
+                aria-label="Pokaż zdjęcie: Odnowiony dziedziniec Fortu 8 Służew"
+              >
+                <img src="img/fort-historia-4.jpg" alt="Odnowiony dziedziniec Fortu 8 Służew" loading="lazy" />
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="fort-history-text">
+          <span class="eyebrow">Historia miejsca</span>
+          <h2>
+            Jesteśmy w&nbsp;murach
+            <span class="gold-script">Fortu 8 Służew</span>
+          </h2>
+          <p>
+            Fort powstał w&nbsp;latach 80. XIX wieku, gdy Rosjanie otaczali
+            Warszawę pierścieniem umocnień. Był jednym z&nbsp;fortów zewnętrznego
+            obwodu twierdzy — ziemne wały, fosa i&nbsp;ceglane schrony miały
+            bronić południowych przedpól miasta.
+          </p>
+          <p>
+            Szybki postęp artylerii sprawił, że fort starzał się, zanim zdążył
+            się przydać. W&nbsp;1909 roku twierdzę zlikwidowano, a&nbsp;w&nbsp;1913
+            część umocnień wysadzono. W&nbsp;czasie okupacji stacjonowali tu
+            niemieccy żołnierze, a&nbsp;po wojnie mury na długo zarosły zielenią.
+          </p>
+          <p>
+            Dziś fort wraca do życia. Odnowione ceglane łuki i&nbsp;kazamaty
+            mieszczą restauracje i&nbsp;lokale, a&nbsp;wały stały się miejscem
+            spacerów. My zajmujemy jeden z&nbsp;tych zabytkowych lokali.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENTY -->
+    <section id="eventy">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Eventy</span>
+          <h2>
+            Imprezy
+            <span class="gold-script">okolicznościowe</span>
+          </h2>
+          <p>
+            Przyjęcia komunijne, wigilie firmowe, kolacje integracyjne,
+            spotkania biznesowe i&nbsp;stypy — organizujemy je u&nbsp;siebie,
+            w&nbsp;całości albo na wydzielonej części lokalu.
+          </p>
+        </div>
+
+        <dl class="event-facts">
+          <div class="row">
+            <dt>Co organizujemy</dt>
+            <dd>
+              Przyjęcia z menu ustalonym z góry, bufet lub serwis kelnerski przy
+              stole. Menu układamy pod grupę — steki, burgery, dania jarskie
+              i&nbsp;dla dzieci.
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Gdzie</dt>
+            <dd>
+              Fort Służew 1B, lokal nr 16 w&nbsp;Warszawie — sala restauracyjna,
+              ogródek przy murach fortu lub cały lokal na wyłączność.
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Ile osób</dt>
+            <dd>
+              Od 10 do 60 osób przy stołach, do 90 przy formule bufetowej.
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Kiedy</dt>
+            <dd>
+              Od wtorku do niedzieli. Wyłączność lokalu również
+              w&nbsp;poniedziałki.
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Za ile</dt>
+            <dd>
+              Menu grupowe od 120 zł od osoby, menu ze stekiem od 190 zł od
+              osoby. Wycenę przygotowujemy indywidualnie w&nbsp;ciągu 24 godzin.
+            </dd>
+          </div>
+          <div class="row">
+            <dt>Kiedy rezerwować</dt>
+            <dd>
+              Zwykle wystarczy 2 tygodnie wcześniej. Grudzień i&nbsp;sezon
+              komunijny (maj–czerwiec) rezerwujcie na 2–3 miesiące przed
+              terminem.
+            </dd>
+          </div>
+        </dl>
+
+        <div class="event-cta">
+          <a href="eventy.html" class="btn btn-solid">Oferta na eventy</a>
+          <a href="#kontakt" class="btn">Zapytaj o termin</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- JAK NAS ZNALEŹĆ W FORCIE -->
+    <section class="fort" id="fort">
+      <div class="wrap fort-grid">
+        <div class="fort-text">
+          <span class="eyebrow">Jak nas znaleźć w Forcie</span>
+          <h2>
+            Jak do nas
+            <span class="gold-script">dojechać</span>
+          </h2>
+          <p>
+            Fort 8 „Służew" to XIX-wieczna fortyfikacja z&nbsp;pierścienia
+            twierdzy Warszawa, dziś w&nbsp;trakcie przebudowy na miejsce
+            z&nbsp;restauracjami, biurami i&nbsp;terenem zielonym. Teren jest
+            duży i&nbsp;łatwo się w&nbsp;nim pogubić przy pierwszej wizycie,
+            więc podpowiadamy drogę.
+          </p>
+          <ol class="fort-steps">
+            <li>
+              Wjedź na teren fortu od strony ulicy Nowoursynowskiej, przez bramę
+              główną.
+            </li>
+            <li>
+              Jedź prosto wzdłuż wału, mijając parking po prawej stronie —
+              miejsca są bezpłatne.
+            </li>
+            <li>
+              Zaparkuj przy budynku 1B i kieruj się w stronę ceglanych łuków.
+            </li>
+            <li>
+              Nasze wejście to lokal nr 16 — szukaj drewnianych drzwi i tarasu z
+              widokiem na fosę.
+            </li>
+          </ol>
+          <div class="cta-box">
+            <a
+              href="https://www.google.com/maps/dir/?api=1&amp;destination=Fort+S%C5%82u%C5%BCew+1B%2C+02-787+Warszawa"
+              target="_blank"
+              rel="noopener"
+              class="btn btn-solid"
+              >Wyznacz trasę</a
+            >
+            <a href="tel:+48 698 052 043" class="btn">Zadzwoń, jeśli błądzisz</a>
+          </div>
+        </div>
+        <div>
+          <img
+            class="fort-image"
+            src="img/fort.jpeg"
+            alt="BEEFshop &amp; GRILL w zabytkowych murach Fortu Służew"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- OPINIE GOOGLE — treść pobierana automatycznie.
+     WordPress: wtyczka opinii Google (np. Widget for Google Reviews) podpięta pod profil wizytówki.
+     Poniższe cytaty to zawartość zastępcza na czas makiety. -->
+    <section class="reviews" id="opinie">
+      <div class="wrap">
+        <span class="eyebrow" style="justify-content: center"
+          >Opinie Google</span
+        >
+        <div class="score">4,6</div>
+        <div class="stars">★★★★★</div>
+        <div class="count">1050 opinii · aktualizowane automatycznie</div>
+        <div class="review-list">
+          <blockquote>
+            <p>
+              Najlepszy ribeye, jaki jadłem w Warszawie. Widać, że mięso jest z
+              konkretnego źródła.
+            </p>
+            <cite>Marek K.</cite>
+          </blockquote>
+          <blockquote>
+            <p>
+              Klimat fortu robi robotę, a obsługa dokładnie tłumaczy stopnie
+              wysmażenia.
+            </p>
+            <cite>Anna W.</cite>
+          </blockquote>
+          <blockquote>
+            <p>
+              Byliśmy z firmą na kolacji dla 30 osób — wszystko dowiezione na
+              czas i ciepłe.
+            </p>
+            <cite>Paweł R.</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section class="visit" id="kontakt">
+      <div class="wrap">
+        <div class="visit-grid">
+          <div>
+            <span class="eyebrow">Kontakt</span>
+            <h2
+              class="serif"
+              style="
+                font-weight: 400;
+                font-size: clamp(2rem, 4.4vw, 3.1rem);
+                line-height: 0.92;
+                margin: 18px 0 26px;
+                text-wrap: balance;
+              "
+            >
+              Zarezerwuj stół albo
+              <span class="gold-script">zapytaj o event</span>
+            </h2>
+            <div class="info">
+              <span>Adres</span
+              ><b>Fort Służew 1B / lokal nr 16<br />02-787 Warszawa</b>
+            </div>
+            <div class="info">
+              <span>Godziny</span
+              ><b>Wt–Nd · 13:00–22:00<br />Poniedziałek nieczynne</b>
+            </div>
+            <div class="info">
+              <span>Rezerwacje</span><b>+48 698 052 043</b>
+            </div>
+            <div class="info">
+              <span>E-mail</span><b>kontakt@beefshop.pl</b>
+            </div>
+            <div class="cta-box">
+              <a href="tel:+48 698 052 043" class="btn btn-solid">Zadzwoń teraz</a>
+              <a
+                href="https://www.google.com/maps/dir/?api=1&amp;destination=Fort+S%C5%82u%C5%BCew+1B%2C+02-787+Warszawa"
+                target="_blank"
+                rel="noopener"
+                class="btn"
+                >Wyznacz trasę</a
+              >
+            </div>
+          </div>
+          <div class="visit-map">
+            <iframe
+              class="map-frame"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d463.5981540763471!2d21.039316668275447!3d52.166922597907366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc881f4f91dd%3A0xf0890ecb76fa8b5!2sBEEFshop%20%26%20GRILL!5e1!3m2!1spl!2spl!4v1788950283130!5m2!1spl!2spl"
+              width="100%"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+            >
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">
+        <div class="foot">
+          <div>
+            <div class="brand">
+              <img
+                src="img/logo3.png"
+                alt="BEEFshop &amp; GRILL"
+                style="max-height: 60px"
+              />
+            </div>
+            <p>
+              Steki i burgery z wołowiny Hereford z własnej ekologicznej hodowli
+              na Warmii i Mazurach. Od pastwiska po talerz.
+            </p>
+          </div>
+          <div class="foot-links">
+            <div class="foot-col">
+              <h4>Strona</h4>
+              <a href="menu.html">Menu</a>
+              <a href="hodowla.html">Hodowla</a>
+              <a href="o-nas.html">O nas</a>
+              <a href="eventy.html">Eventy</a>
+              <a href="galeria.html">Galeria</a>
+            </div>
+            <div class="foot-col">
+              <h4>Sklep</h4>
+              <a href="https://BEEFshop.pl">BEEFshop.pl</a>
+              <p>Sprzedaż detaliczna online</p>
+            </div>
+            <div class="foot-col">
+              <h4>Kontakt</h4>
+              <p>Fort Służew 1B / lokal nr 16</p>
+              <p>02-787 Warszawa</p>
+              <p>+48 698 052 043</p>
+              <a href="mailto:kontakt@beefshop.pl">kontakt@beefshop.pl</a>
+              <a
+                href="https://www.google.com/maps/dir/?api=1&amp;destination=Fort+S%C5%82u%C5%BCew+1B%2C+02-787+Warszawa"
+                target="_blank"
+                rel="noopener"
+                >Wyznacz trasę</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <span>© 2026 BEEFshop &amp; GRILL · Wszelkie prawa zastrzeżone</span>
+          <span>Hodowla <b>Futura · Hereford</b></span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /* Menu mobilne */
+      (function () {
+        var burger = document.getElementById("burger");
+        var menu = document.getElementById("mobile-menu");
+        burger.addEventListener("click", function () {
+          var open = menu.classList.toggle("open");
+          burger.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+        menu.addEventListener("click", function (e) {
+          if (e.target.tagName === "A") {
+            menu.classList.remove("open");
+            burger.setAttribute("aria-expanded", "false");
+          }
+        });
+      })();
+
+      /* Stopień wysmażenia — suwak + skala */
+      (function () {
+        var levels = [
+          {
+            name: "Blue rare",
+            temp: "48–50 °C w środku",
+            desc: "Krótko obsmażony z zewnątrz, w środku praktycznie surowy i chłodny. Dla tych, którzy chcą poczuć samo mięso.",
+          },
+          {
+            name: "Rare",
+            temp: "50–52 °C w środku",
+            desc: "Czerwony, wyraźnie soczysty środek i cienka smażona skorupka. Najlepiej pokazuje smak polędwicy.",
+          },
+          {
+            name: "Medium rare",
+            temp: "54–57 °C w środku",
+            desc: "Nasza domyślna rekomendacja. Różowy środek, mięso miękkie i pełne soku — tak podajemy ribeye.",
+          },
+          {
+            name: "Medium",
+            temp: "60–63 °C w środku",
+            desc: "Jasnoróżowy środek, mniej soku, bardziej zwarta struktura. Bezpieczny wybór na pierwszy stek.",
+          },
+          {
+            name: "Medium well",
+            temp: "65–68 °C w środku",
+            desc: "Ledwie różowa nitka w środku. Mięso jest wyraźnie ścięte, ale wciąż nie suche.",
+          },
+          {
+            name: "Well done",
+            temp: "70 °C i więcej",
+            desc: "Wysmażony na wskroś. Do takiego stopnia polecamy tłustsze kawałki, np. ribeye — nie wysychają.",
+          },
+        ];
+        var range = document.getElementById("done-range");
+        var name = document.getElementById("done-name");
+        var temp = document.getElementById("done-temp");
+        var desc = document.getElementById("done-desc");
+        var imgs = document.querySelectorAll(".done-stage img");
+        var btns = document.querySelectorAll("#done-scale button");
+
+        function setLevel(i) {
+          i = Math.max(0, Math.min(levels.length - 1, parseInt(i, 10)));
+          var l = levels[i];
+          name.textContent = l.name;
+          temp.textContent = l.temp;
+          desc.textContent = l.desc;
+          imgs.forEach(function (img) {
+            img.classList.toggle("is-active", img.dataset.level == i);
+          });
+          btns.forEach(function (b) {
+            b.setAttribute(
+              "aria-current",
+              b.dataset.level == i ? "true" : "false",
+            );
+          });
+          if (range.value != i) {
+            range.value = i;
+          }
+        }
+        var current = 0;
+        var autoTimer = null;
+        var resumeTimer = null;
+        var AUTO_DELAY = 2800; // co ile ms zmienia się stopień sam
+        var RESUME_DELAY = 5000; // po ilu ms bezczynności wraca autoodtwarzanie
+
+        function goToNext() {
+          current = (current + 1) % levels.length;
+          setLevel(current);
+        }
+
+        function startAuto() {
+          stopAuto();
+          autoTimer = setInterval(goToNext, AUTO_DELAY);
+        }
+
+        function stopAuto() {
+          if (autoTimer) {
+            clearInterval(autoTimer);
+            autoTimer = null;
+          }
+        }
+
+        function pauseAutoTemporarily() {
+          stopAuto();
+          if (resumeTimer) clearTimeout(resumeTimer);
+          resumeTimer = setTimeout(startAuto, RESUME_DELAY);
+        }
+
+        range.addEventListener("input", function () {
+          current = parseInt(this.value, 10);
+          setLevel(current);
+          pauseAutoTemporarily();
+        });
+        btns.forEach(function (b) {
+          b.addEventListener("mouseenter", function () {
+            current = parseInt(b.dataset.level, 10);
+            setLevel(current);
+            pauseAutoTemporarily();
+          });
+          b.addEventListener("focus", function () {
+            current = parseInt(b.dataset.level, 10);
+            setLevel(current);
+            pauseAutoTemporarily();
+          });
+        });
+
+        setLevel(0);
+        startAuto();
+      })();
+
+      /* Historia fortu — galeria miniatur */
+      (function () {
+        var main = document.getElementById("fort-gallery-main");
+        if (!main) return;
+        var thumbs = document.querySelectorAll(".fort-thumb");
+        var reduce = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        thumbs.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            if (btn.getAttribute("aria-pressed") === "true") return;
+            var img = btn.querySelector("img");
+            thumbs.forEach(function (b) {
+              b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+            });
+            var swap = function () {
+              main.src = img.currentSrc || img.src;
+              main.alt = img.alt;
+              main.classList.remove("is-fading");
+            };
+            if (reduce) {
+              swap();
+              return;
+            }
+            main.classList.add("is-fading");
+            setTimeout(swap, 250);
+          });
+        });
+      })();
+
+      /* Galeria — kolaż + podgląd pełnego zdjęcia */
+      (function () {
+        var box = document.getElementById("lightbox");
+        if (!box || typeof box.showModal !== "function") return;
+        var items = Array.prototype.slice.call(
+          document.querySelectorAll(".collage-item"),
+        );
+        var big = document.getElementById("lightbox-img");
+        var count = document.getElementById("lightbox-count");
+        var text = document.getElementById("lightbox-text");
+        var current = 0;
+        var lastFocus = null;
+
+        function show(i) {
+          current = (i + items.length) % items.length;
+          var img = items[current].querySelector("img");
+          big.src = img.currentSrc || img.src;
+          big.alt = img.alt;
+          text.textContent = img.alt;
+          count.textContent = current + 1 + " / " + items.length;
+        }
+        items.forEach(function (btn, i) {
+          btn.addEventListener("click", function () {
+            lastFocus = btn;
+            show(i);
+            box.showModal();
+          });
+        });
+        document.getElementById("lightbox-close").addEventListener("click", function () {
+          box.close();
+        });
+        document.getElementById("lightbox-prev").addEventListener("click", function () {
+          show(current - 1);
+        });
+        document.getElementById("lightbox-next").addEventListener("click", function () {
+          show(current + 1);
+        });
+        box.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowLeft") show(current - 1);
+          if (e.key === "ArrowRight") show(current + 1);
+        });
+        /* klik w tło zamyka podgląd */
+        box.addEventListener("click", function (e) {
+          if (e.target === box || e.target.classList.contains("lightbox-figure")) {
+            box.close();
+          }
+        });
+        /* gesty na telefonie */
+        var startX = null;
+        box.addEventListener("touchstart", function (e) {
+          startX = e.touches[0].clientX;
+        }, { passive: true });
+        box.addEventListener("touchend", function (e) {
+          if (startX === null) return;
+          var dx = e.changedTouches[0].clientX - startX;
+          if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+          startX = null;
+        });
+        box.addEventListener("close", function () {
+          document.body.style.overflow = "";
+          if (lastFocus) lastFocus.focus();
+        });
+        var open = box.showModal.bind(box);
+        box.showModal = function () {
+          document.body.style.overflow = "hidden";
+          open();
+        };
+      })();
+
+      /* Strzałki między sekcjami: każda rysuje się, gdy wjedzie na ekran */
+      (function () {
+        var arrows = document.querySelectorAll(".flow-arrow");
+        if (!arrows.length || !("IntersectionObserver" in window)) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              entry.target.getBoundingClientRect();
+              entry.target.classList.add("is-drawn");
+              io.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.6 },
+        );
+        arrows.forEach(function (a) {
+          a.classList.add("is-armed");
+          io.observe(a);
+        });
+      })();
+
+      /* Wideo w hero: na wąskich ekranach i przy oszczędzaniu danych zostaje sam plakat */
+      (function () {
+        var v = document.getElementById("hero-video");
+        if (!v) return;
+        var saveData = navigator.connection && navigator.connection.saveData;
+        var reduce = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        if (window.innerWidth < 768 || saveData || reduce) {
+          return;
+        }
+        v.setAttribute("preload", "auto");
+        v.load();
+        var play = v.play();
+        if (play && play.catch) {
+          play.catch(function () {});
+        }
+      })();
+    </script>
+  </body>
+</html>
