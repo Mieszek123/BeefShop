@@ -839,12 +839,14 @@
         cursor: pointer;
       }
       .done-slider::-webkit-slider-runnable-track {
-        height: 2px;
-        background: var(--line-strong);
+        height: 6px;
+        background: linear-gradient(to right, #ffffff 0%, #d98989 100%);
+        border-radius: 999px;
       }
       .done-slider::-moz-range-track {
-        height: 2px;
-        background: var(--line-strong);
+        height: 6px;
+        background: linear-gradient(to right, #ffffff 0%, #d98989 100%);
+        border-radius: 999px;
       }
       .done-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
@@ -852,16 +854,16 @@
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        background: var(--gold);
+        background: #c96565;
         margin-top: -10px;
-        border: 0;
+        border: 2px solid #ffffff;
       }
       .done-slider::-moz-range-thumb {
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        background: var(--gold);
-        border: 0;
+        background: #c96565;
+        border: 2px solid #ffffff;
       }
       .done-scale {
         display: flex;
@@ -2478,6 +2480,15 @@
 
         range.addEventListener("input", function () {
           current = parseInt(this.value, 10);
+          setLevel(current);
+          pauseAutoTemporarily();
+        });
+        range.addEventListener("mousemove", function (event) {
+          var rect = range.getBoundingClientRect();
+          var position = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+          var level = Math.round(position * (levels.length - 1));
+          if (level === current) return;
+          current = level;
           setLevel(current);
           pauseAutoTemporarily();
         });
